@@ -232,7 +232,7 @@ RSpec.describe "merchant index workflow", type: :feature do
         end
       end
 
-      it 'shows top merchants by items fulfilled this month' do
+      xit 'shows top merchants by items fulfilled by month' do
         visit merchants_path
 
         within('#top-merchants-by-qty-fulfilled-this-month') do
@@ -240,10 +240,6 @@ RSpec.describe "merchant index workflow", type: :feature do
           expect(page.all('li')[1]).to have_content("#{@u1.name}: $33.00")
           expect(page.all('li')[2]).to have_content("#{@u2.name}: $31.50")
         end
-      end
-
-      it 'shows top merchants by items fulfilled last month' do
-        visit merchants_path
 
         within('#top-merchants-by-qty-fulfilled-last-month') do
           expect(page.all('li')[0]).to have_content("#{@u3.name}: $72.00")

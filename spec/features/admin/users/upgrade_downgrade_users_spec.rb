@@ -31,7 +31,9 @@ RSpec.describe 'Upgrade/Downgrade users', type: :feature do
       login_as(@admin)
 
       visit merchants_path
-      click_link @merchant.name
+      within "#merchant-#{@merchant.id}" do
+        click_link @merchant.name
+      end 
       expect(current_path).to eq(admin_merchant_path(@merchant))
       click_button 'Downgrade to User'
 
