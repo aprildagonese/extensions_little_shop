@@ -16,7 +16,7 @@ RSpec.describe "as a registered user" do
       within "#oitem-#{order_item.id}" do
         click_link("Review This Item")
       end
-      save_and_open_page
+
       expect(current_path).to eq(new_order_item_review_path(order_item))
     end
   end
