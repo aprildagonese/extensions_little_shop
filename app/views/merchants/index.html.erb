@@ -49,18 +49,18 @@
         <% end %>
       </ul>
     <% end %>
-    <%= tag.section id: "top-merchants-by-qty", class: "card-body float-left m-2" do %>
-      <h5 class="card-title">Top Merchants by Quantity Sold</h5>
+    <%= tag.section id: "top-merchants-by-qty-this-month", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Top Merchants by Quantity Sold This Month</h5>
       <ul>
-        <% @top_merchants_by_qty_sold.each do |merchant| %>
+        <% @top_merchants_by_qty_current_month.each do |merchant| %>
           <li><%= link_to merchant.name, merchant_path(merchant) %>: <%= pluralize(merchant.qty_sold, "item") %> sold</li>
         <% end %>
       </ul>
     <% end %>
-    <%= tag.section id: "bottom-merchants-by-qty", class: "card-body float-left m-2" do %>
-      <h5 class="card-title">Bottom Merchants by Quantity Sold</h5>
+    <%= tag.section id: "top-merchants-by-qty-last-month", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Bottom Merchants by Quantity Sold Last Month</h5>
       <ul>
-        <% @bottom_merchants_by_qty_sold.each do |merchant| %>
+        <% @top_merchants_by_qty_last_month.each do |merchant| %>
           <li><%= link_to merchant.name, merchant_path(merchant) %>: <%= pluralize(merchant.qty_sold, "item") %> sold</li>
         <% end %>
       </ul>
