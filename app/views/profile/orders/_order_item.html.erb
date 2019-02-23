@@ -9,8 +9,14 @@
     <p>Quantity: <%= oitem.quantity %></p>
     <p>Subtotal: <%= number_to_currency(oitem.subtotal) %></p>
     <p>Fulfilled: <%= oitem.fulfilled ? 'Yes' : 'No' %></p>
-    <% if oitem.fulfilled == true && order.completed? %>
-      <%= link_to "Review This Item", new_order_item_review_path(oitem) %>
+    <% if oitem.fulfilled == true && order.completed? && oitem.review == nil %>
+      <%= button_to "Review This Item", new_order_item_review_path(oitem) %>
+    <% elsif oitem.review %>
+      <h5>Your Review: <%= oitem.review.title %></h5>
+      <p>Description: <%= oitem.review.description %></p>
+      <p>Your Rating: <%= oitem.review.rating %></p>
+      <p>Updated On: <%= oitem.review.updated_at %> <% if oitem.review.updated_at %><% end %></p>
+      <%= button_to "Edit This Review" %>
     <% end %>
   </div>
 </div>
