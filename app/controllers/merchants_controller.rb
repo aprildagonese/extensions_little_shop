@@ -14,8 +14,8 @@ class MerchantsController < ApplicationController
     @top_cities_by_order_count = User.top_user_cities_by_order_count(3)
     @top_orders_by_items_shipped = Order.sorted_by_items_shipped(3)
     #-------
-    @top_merchants_by_sales = User.where(role: 1).limit(10)
-    @bottom_merchants_by_sales = User.where(role: 1).limit(10)
+    @top_merchants_by_qty_sold = User.merchants_by_qty_sold
+    @bottom_merchants_by_qty_sold = User.merchants_by_qty_sold("asc")
     @top_merchants_by_fulfillment = User.where(role: 1).limit(10)
     @bottom_merchants_by_fulfillment = User.where(role: 1).limit(10)
   end

@@ -69,6 +69,14 @@ class User < ApplicationRecord
         .limit(limit)
   end
 
+  def self.merchants_by_qty_sold(direction = "desc", limit = 10)
+    self.joins(items: :order_items)
+        .select('users.*, sum(order_items.quantity) AS qty_sold')
+        .group(:id)
+        .order("qty_sold #{direction}")
+        .limit(limit)
+  end
+
   def top_items_sold_by_quantity(limit)
     items.joins(:order_items)
          .where(order_items: {fulfilled: true})
