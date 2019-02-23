@@ -1,0 +1,13 @@
+<%= form_for [@order_item, @review] do |f| %>
+
+<%= f.label :title %>
+<%= f.text_field :title, required: true %>
+
+<%= f.label :description %>
+<%= f.text_area :description, required: true %>
+
+<%= f.label :rating %>
+<%= f.number_field :rating, required: true %>
+
+<%= f.submit %>
+<% end %>
