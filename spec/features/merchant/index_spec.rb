@@ -92,34 +92,34 @@ RSpec.describe "merchant index workflow", type: :feature do
 
     describe "shows merchant statistics" do
       before :each do
-        u1 = create(:user, state: "CO", city: "Fairfield")
-        u3 = create(:user, state: "IA", city: "Fairfield")
-        u2 = create(:user, state: "OK", city: "OKC")
-        u4 = create(:user, state: "IA", city: "Des Moines")
-        u5 = create(:user, state: "IA", city: "Des Moines")
-        u6 = create(:user, state: "IA", city: "Des Moines")
+        @u1 = create(:user, state: "CO", city: "Fairfield")
+        @u3 = create(:user, state: "IA", city: "Fairfield")
+        @u2 = create(:user, state: "OK", city: "OKC")
+        @u4 = create(:user, state: "IA", city: "Des Moines")
+        @u5 = create(:user, state: "IA", city: "Des Moines")
+        @u6 = create(:user, state: "IA", city: "Des Moines")
         @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
-        i1 = create(:item, merchant_id: @m1.id)
-        i2 = create(:item, merchant_id: @m2.id)
-        i3 = create(:item, merchant_id: @m3.id)
-        i4 = create(:item, merchant_id: @m4.id)
-        i5 = create(:item, merchant_id: @m5.id)
-        i6 = create(:item, merchant_id: @m6.id)
-        i7 = create(:item, merchant_id: @m7.id)
-        @o1 = create(:completed_order, user: u1)
-        @o2 = create(:completed_order, user: u2)
-        @o3 = create(:completed_order, user: u3)
-        @o4 = create(:completed_order, user: u1)
-        @o5 = create(:cancelled_order, user: u5)
-        @o6 = create(:completed_order, user: u6)
-        @o7 = create(:completed_order, user: u6)
-        oi1 = create(:fulfilled_order_item, item: i1, order: @o1, created_at: 5.minutes.ago)
-        oi2 = create(:fulfilled_order_item, item: i2, order: @o2, created_at: 53.5.hours.ago)
-        oi3 = create(:fulfilled_order_item, item: i3, order: @o3, created_at: 6.days.ago)
-        oi4 = create(:order_item, item: i4, order: @o4, created_at: 4.days.ago)
-        oi5 = create(:order_item, item: i5, order: @o5, created_at: 5.days.ago)
-        oi6 = create(:fulfilled_order_item, item: i6, order: @o6, created_at: 3.days.ago)
-        oi7 = create(:fulfilled_order_item, item: i7, order: @o7, created_at: 2.hours.ago)
+        @i1 = create(:item, merchant_id: @m1.id)
+        @i2 = create(:item, merchant_id: @m2.id)
+        @i3 = create(:item, merchant_id: @m3.id)
+        @i4 = create(:item, merchant_id: @m4.id)
+        @i5 = create(:item, merchant_id: @m5.id)
+        @i6 = create(:item, merchant_id: @m6.id)
+        @i7 = create(:item, merchant_id: @m7.id)
+        @o1 = create(:completed_order, user: @u1)
+        @o2 = create(:completed_order, user: @u2)
+        @o3 = create(:completed_order, user: @u3)
+        @o4 = create(:completed_order, user: @u1)
+        @o5 = create(:cancelled_order, user: @u5)
+        @o6 = create(:completed_order, user: @u6)
+        @o7 = create(:completed_order, user: @u6)
+        @oi1 = create(:fulfilled_order_item, item: @i1, order: @o1, created_at: 5.minutes.ago)
+        @oi2 = create(:fulfilled_order_item, item: @i2, order: @o2, created_at: 53.5.hours.ago)
+        @oi3 = create(:fulfilled_order_item, item: @i3, order: @o3, created_at: 6.days.ago)
+        @oi4 = create(:order_item, item: @i4, order: @o4, created_at: 4.days.ago)
+        @oi5 = create(:order_item, item: @i5, order: @o5, created_at: 5.days.ago)
+        @oi6 = create(:fulfilled_order_item, item: @i6, order: @o6, created_at: 3.days.ago)
+        @oi7 = create(:fulfilled_order_item, item: @i7, order: @o7, created_at: 2.hours.ago)
       end
 
       it "top 3 merchants by price and quantity, with their revenue" do
@@ -183,6 +183,71 @@ RSpec.describe "merchant index workflow", type: :feature do
           expect(page).to have_content("Order #{@o3.id}: 8 items")
         end
       end
+    end
+
+    describe "shows merchant leaderboard" do
+      it 'shows top merchant by items sold by month' do
+        @u1 = create(:user, state: "CO", city: "Fairfield")
+        @u3 = create(:user, state: "IA", city: "Fairfield")
+        @u2 = create(:user, state: "OK", city: "OKC")
+        @u4 = create(:user, state: "IA", city: "Des Moines")
+        @u5 = create(:user, state: "IA", city: "Des Moines")
+        @u6 = create(:user, state: "IA", city: "Des Moines")
+        @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
+        @i1 = create(:item, merchant_id: @m1.id)
+        @i2 = create(:item, merchant_id: @m2.id)
+        @i3 = create(:item, merchant_id: @m3.id)
+        @i4 = create(:item, merchant_id: @m4.id)
+        @i5 = create(:item, merchant_id: @m5.id)
+        @i6 = create(:item, merchant_id: @m6.id)
+        @i7 = create(:item, merchant_id: @m7.id)
+        @o1 = create(:completed_order, user: @u1)
+        @o2 = create(:completed_order, user: @u2)
+        @o3 = create(:completed_order, user: @u3)
+        @o4 = create(:completed_order, user: @u1)
+        @o5 = create(:cancelled_order, user: @u5)
+        @o6 = create(:completed_order, user: @u6)
+        @o7 = create(:completed_order, user: @u6)
+        @oi1 = create(:fulfilled_order_item, item: @i1, order: @o1, created_at: 5.minutes.ago, quantity: 7)
+        @oi2 = create(:fulfilled_order_item, item: @i2, order: @o2, created_at: 53.5.hours.ago, quantity: 6)
+        @oi3 = create(:fulfilled_order_item, item: @i3, order: @o3, created_at: 26.days.ago, quantity: 5)
+        @oi4 = create(:order_item, item: @i4, order: @o4, created_at: 27.days.ago, quantity: 4)
+        @oi5 = create(:order_item, item: @i5, order: @o5, created_at: 28.days.ago, quantity: 3)
+        @oi6 = create(:fulfilled_order_item, item: @i6, order: @o6, created_at: 3.days.ago, quantity: 2)
+        @oi7 = create(:fulfilled_order_item, item: @i7, order: @o7, created_at: 2.hours.ago, quantity: 1)
+
+        visit merchants_path
+
+        within('#top-merchants-by-qty-this-month') do
+          expect(page.all('li')[0]).to have_content("#{@m1.name}: 7 items sold")
+          expect(page.all('li')[1]).to have_content("#{@m2.name}: 6 items sold")
+          expect(page.all('li')[2]).to have_content("#{@m6.name}: 2 items sold")
+          expect(page.all('li')[3]).to have_content("#{@m7.name}: 1 item sold")
+        end
+
+        within('#top-merchants-by-qty-last-month') do
+          expect(page.all('li')[0]).to have_content("#{@m3.name}: 5 items sold")
+          expect(page.all('li')[1]).to have_content("#{@m4.name}: 4 items sold")
+          expect(page.all('li')[2]).to have_content("#{@m5.name}: 3 items sold")
+        end
+      end
+
+      xit 'shows top merchants by items fulfilled by month' do
+        visit merchants_path
+
+        within('#top-merchants-by-qty-fulfilled-this-month') do
+          expect(page.all('li')[0]).to have_content("#{@u3.name}: $72.00")
+          expect(page.all('li')[1]).to have_content("#{@u1.name}: $33.00")
+          expect(page.all('li')[2]).to have_content("#{@u2.name}: $31.50")
+        end
+
+        within('#top-merchants-by-qty-fulfilled-last-month') do
+          expect(page.all('li')[0]).to have_content("#{@u3.name}: $72.00")
+          expect(page.all('li')[1]).to have_content("#{@u1.name}: $33.00")
+          expect(page.all('li')[2]).to have_content("#{@u2.name}: $31.50")
+        end
+      end
+
     end
   end
 end

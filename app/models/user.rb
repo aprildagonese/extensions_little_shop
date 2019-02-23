@@ -69,6 +69,24 @@ class User < ApplicationRecord
         .limit(limit)
   end
 
+  def self.merchants_by_qty_sold_this_month
+    self.joins(items: :order_items)
+        .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.beginning_of_month, Date.today.end_of_month)
+        .select('users.*, sum(order_items.quantity) AS qty_sold')
+        .group(:id)
+        .order("qty_sold desc")
+        .limit(10)
+  end
+
+  def self.merchants_by_qty_sold_last_month
+    self.joins(items: :order_items)
+        .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.last_month.beginning_of_month, Date.today.beginning_of_month)
+        .select('users.*, sum(order_items.quantity) AS qty_sold')
+        .group(:id)
+        .order("qty_sold desc")
+        .limit(10)
+  end
+
   def top_items_sold_by_quantity(limit)
     items.joins(:order_items)
          .where(order_items: {fulfilled: true})
