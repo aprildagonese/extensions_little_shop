@@ -49,6 +49,38 @@
         <% end %>
       </ul>
     <% end %>
+    <%= tag.section id: "top-merchants-by-sales", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Top Orders by Items Shipped</h5>
+      <ul>
+        <% @top_merchants_by_sales.each do |merchant| %>
+          <li>Order <%= result.id %>: <%= pluralize(result.quantity, "item") %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <%= tag.section id: "bottom-merchants-by-sales", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Top Orders by Items Shipped</h5>
+      <ul>
+        <% @bottom_merchants_by_sales.each do |merchant| %>
+          <li>Order <%= result.id %>: <%= pluralize(result.quantity, "item") %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <%= tag.section id: "top-merchants-by-fulfillment", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Top Orders by Items Shipped</h5>
+      <ul>
+        <% @top_merchants_by_fulfillment.each do |result| %>
+          <li>Order <%= result.id %>: <%= pluralize(result.quantity, "item") %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <%= tag.section id: "bottom-merchants-by-fulfillment", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Top Orders by Items Shipped</h5>
+      <ul>
+        <% @bottom_merchants_by_fulfillment.each do |result| %>
+          <li>Order <%= result.id %>: <%= pluralize(result.quantity, "item") %></li>
+        <% end %>
+      </ul>
+    <% end %>
   <% end %>
 <% end %>
 
