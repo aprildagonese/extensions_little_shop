@@ -69,6 +69,18 @@ class User < ApplicationRecord
         .limit(limit)
   end
 
+  def self.merchants_by_location_by_fulfillment_time(location)
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.user_id = users.id')
+        .where(orders: {status: 1})
+        .where(order_items: {fulfilled: true})
+        .select('users.*, avg(order_items.updated_at - order_items.created_at) AS fulfillment_time')
+        .group(:id)
+        .order("fulfillment_time asc")
+        .limit(5)
+  end
+
   def self.merchants_by_qty_sold_this_month
     self.joins(items: :order_items)
         .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.beginning_of_month, Date.today.end_of_month)

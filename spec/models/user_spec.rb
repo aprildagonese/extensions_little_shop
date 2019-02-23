@@ -102,7 +102,7 @@ RSpec.describe User, type: :model do
 
     describe "more statistics" do
       before :each do
-        @u1 = create(:user, city: "Los Angeles", state: "CA")
+        @u1 = create(:user, city: "San Francisco", state: "CA")
         @u2 = create(:user, city: "Denver", state: "CO")
         @u3 = create(:user, city: "Portland", state: "OR")
         @u4 = create(:user, city: "San Francisco", state: "CA")
@@ -113,9 +113,9 @@ RSpec.describe User, type: :model do
         @u9 = create(:user, city: "San Diego", state: "CA")
         @u10 = create(:user, city: "Boulder", state: "CO")
         @u11 = create(:user, city: "Santa Barbara", state: "CA")
-        @u12 = create(:user, city: "Oakland", state: "CA")
+        @u12 = create(:user, city: "San Francisco", state: "CA")
         @u13 = create(:user, city: "Breckenridge", state: "CO")
-        @m1, @m2, @m3, @m4, @m5, @m6, @m7, @m8, @m9, @m10, @m11, @m12, @m13 = create_list(:merchant, 13)
+        @m1, @m2, @m3, @m4, @m5, @m6, @m7, @m8, @m9, @m10, @m11, @m12, @m13 = create_list(:merchant, 13, state: "CO")
         @i1 = create(:item, merchant_id: @m1.id)
         @i2 = create(:item, merchant_id: @m2.id)
         @i3 = create(:item, merchant_id: @m3.id)
@@ -167,8 +167,12 @@ RSpec.describe User, type: :model do
         expect(User.merchants_by_qty_sold_last_month.first.qty_sold).to eq(12)
       end
 
-      it ".top_merchants_by_my_state_by_fulfillment_time" do
-        expect(User.top_merchants_by_fulfillment_time(3)).to eq([@m1, @m7, @m6])
+      it ".merchants_by_my_location_by_fulfillment_time" do
+        expected_ca = [@m1, @m4, @m9, @m11, @m12]
+        expected_or = [@m3, @m6, @m7, @m8]
+        binding.pry
+        expect(User.merchants_by_location_by_fulfillment_time("state = CA")).to eq(expected_ca)
+        expect(User.merchants_by_location_by_fulfillment_time("state = OR")).to eq(expected_or)
       end
 
       it ".top_merchants_by_my_city_by_fulfillment_time" do
