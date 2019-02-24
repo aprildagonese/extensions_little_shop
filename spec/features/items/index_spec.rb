@@ -40,7 +40,7 @@ RSpec.describe 'items index workflow', type: :feature do
       visit items_path
 
       within "#item-#{item1.id}" do
-        expect(page).to have_content("Average Rating: 3")
+        expect(page).to have_content("Average User Rating: 3")
       end
     end
   end

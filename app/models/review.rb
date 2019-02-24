@@ -15,11 +15,4 @@ class Review < ApplicationRecord
     self.where(user_id: user.id)
   end
 
-  def self.item_reviews(item)
-    item.reviews
-  end
-
-  def self.avg_rating(item)
-    item.reviews.average(:rating).to_f.round(2)
-  end
 end

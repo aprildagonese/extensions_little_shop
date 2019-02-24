@@ -27,7 +27,10 @@
       <% end %><br/>
 
       <strong>Average time to fulfill:</strong>
-        <%= item.avg_time_to_fulfill %>!
+        <%= item.avg_time_to_fulfill %>
+
+      <strong>Average User Rating:</strong>
+        <%= item.avg_rating %>
     </p>
 
     <% if current_reguser? || current_user.nil? %>

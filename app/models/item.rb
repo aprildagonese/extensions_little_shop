@@ -48,4 +48,9 @@ class Item < ApplicationRecord
       .where(fulfilled: true, orders: {status: :completed}, item_id: self.id)
       .count > 0
   end
+
+  def avg_rating
+    self.reviews.average(:rating).to_f.round(2)
+  end
+
 end

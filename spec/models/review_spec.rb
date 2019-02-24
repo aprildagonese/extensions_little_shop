@@ -39,18 +39,5 @@ RSpec.describe Review, type: :model do
       expected2 = [@review3, @review4]
       expect(Review.my_reviews(@user2)).to eq(expected2)
     end
-
-    it ".item_reviews" do
-      expected1 = [@review, @review2, @review3]
-      expected2 = [@review4]
-
-      expect(Review.item_reviews(@item)).to eq(expected1)
-      expect(Review.item_reviews(@item2)).to eq(expected2)
-    end
-
-    it ".avg_rating" do
-      expect(Review.avg_rating(@item)).to eq(2)
-      expect(Review.avg_rating(@item2)).to eq(5)
-    end
   end
 end
