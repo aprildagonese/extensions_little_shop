@@ -65,7 +65,7 @@ RSpec.describe "as a registered user" do
       expect(current_path).to eq(reviews_path)
 
       within "#review-#{review.id}" do
-        expect(page).to have_content("Your Review: #{review.title}")
+        expect(page).to have_content("Title: #{review.title}")
         expect(page).to have_content("Description: #{review.description}")
         expect(page).to have_content("Rating: #{review.rating}")
         expect(page).to_not have_content("Updated on:")
@@ -73,7 +73,7 @@ RSpec.describe "as a registered user" do
       end
 
       within "#review-#{review2.id}" do
-        expect(page).to have_content("Your Review: #{review2.title}")
+        expect(page).to have_content("Title: #{review2.title}")
         expect(page).to have_content("Description: #{review2.description}")
         expect(page).to have_content("Rating: #{review2.rating}")
         expect(page).to_not have_content("Updated on:")
@@ -96,7 +96,7 @@ RSpec.describe "as a registered user" do
           click_button("Edit This Review")
         end
 
-        expect(current_path).to eq(review_path(review))
+        expect(current_path).to eq(edit_review_path(review))
       end
 
       it "from the order page" do
@@ -114,7 +114,7 @@ RSpec.describe "as a registered user" do
           click_button("Edit This Review")
         end
 
-        expect(current_path).to eq(review_path(review))
+        expect(current_path).to eq(edit_review_path(review))
 
         fill_in "Title", with: "Updated Review"
         click_on "Update Review"
@@ -163,7 +163,7 @@ RSpec.describe "as a registered user" do
         end
 
         expect(Review.count).to eq(0)
-        expect(current_path).to eq(review_path)
+        expect(current_path).to eq(reviews_path)
       end
     end
   end
