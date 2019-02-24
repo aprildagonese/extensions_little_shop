@@ -12,12 +12,11 @@ RSpec.describe "as a registered user" do
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
       visit profile_order_path(order)
-
       within "#oitem-#{order_item.id}" do
-        click_button("Review This Item")
+        click_link("Review This Item")
       end
 
-      expect(current_path).to eq(new_order_item_review_path(order_item))
+      expect(current_path).to eq(new_review_path)
     end
 
     it "by submitting a review form" do
@@ -28,7 +27,7 @@ RSpec.describe "as a registered user" do
       order_item = create(:fulfilled_order_item, order: order, item: item)
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
-      visit new_order_item_review_path(order_item)
+      visit new_review_path(order_item: order_item)
       fill_in "Title", with: "Great item!"
       fill_in "Description", with: "This item was exactly what I needed."
       fill_in "Rating", with: 5

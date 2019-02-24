@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create, :update]
 
+  resources :reviews, only: [:new, :create, :index, :update, :destroy]
+
   get '/cart', to: 'cart#show'
   post '/cart/item/:id', to: 'cart#add', as: :cart_item
   post '/cart/addmoreitem/:id', to: 'cart#add_more_item', as: :cart_add_more_item
@@ -24,11 +26,6 @@ Rails.application.routes.draw do
   delete '/cart/item/:id/all', to: 'cart#remove_all_of_item', as: :cart_remove_item_all
 
   resources :items, only: [:index, :show]
-
-  resources :reviews, only: [:index, :update, :destroy]
-  resources :order_items, only: [] do
-    resources :reviews, only: [:new, :create]
-  end
 
   scope :dashboard, as: :dashboard do
     get '/', to: 'merchants#show'
