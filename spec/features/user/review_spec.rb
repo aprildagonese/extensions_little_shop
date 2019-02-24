@@ -79,7 +79,92 @@ RSpec.describe "as a registered user" do
         expect(page).to_not have_content("Updated on:")
         expect(page).to have_button("Edit This Review")
       end
+    end
 
+    context "I can edit one of my reviews" do
+      it "from the reviews index" do
+        user = create(:user)
+        merchant = create(:merchant)
+        item = create(:item, user: merchant)
+        order = create(:order, user: user, status: 1)
+        order_item = create(:fulfilled_order_item, order: order, item: item)
+        review = create(:review, user: user, order_item: order_item, title: "My Review")
+
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+        visit profile_order_path(order)
+        within "#oitem-#{order_item.id}" do
+          click_link("Edit This Review")
+        end
+
+        expect(current_path).to eq(review_path(review))
+      end
+
+      it "from the order page" do
+        user = create(:user)
+        merchant = create(:merchant)
+        item = create(:item, user: merchant)
+        order = create(:order, user: user, status: 1)
+        order_item = create(:fulfilled_order_item, order: order, item: item)
+        review = create(:review, user: user, order_item: order_item, title: "My Review")
+
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+        visit reviews_path
+
+        within "#review-#{review.id}" do
+          click_link("Edit This Review")
+        end
+
+        expect(current_path).to eq(review_path(review))
+
+        fill_in "Title", with: "Updated Review"
+        click_on "Update Review"
+
+        expect(current_path).to eq(reviews_path)
+        within "#review-#{review.id}" do
+          expect(page).to have_content("Updated Review")
+        end
+
+      end
+    end
+    context "I can delete one of my reviews" do
+      it "from the reviews index" do
+        user = create(:user)
+        merchant = create(:merchant)
+        item = create(:item, user: merchant)
+        order = create(:order, user: user, status: 1)
+        order_item = create(:fulfilled_order_item, order: order, item: item)
+        review = create(:review, user: user, order_item: order_item, title: "My Review")
+
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+        visit profile_order_path(order)
+        expect(Review.count).to eq(1)
+        within "#oitem-#{order_item.id}" do
+          click_link("Delete This Review")
+        end
+
+        expect(Review.count).to eq(0)
+        expect(current_path).to eq(reviews_path)
+      end
+
+      it "from the order page" do
+        user = create(:user)
+        merchant = create(:merchant)
+        item = create(:item, user: merchant)
+        order = create(:order, user: user, status: 1)
+        order_item = create(:fulfilled_order_item, order: order, item: item)
+        review = create(:review, user: user, order_item: order_item, title: "My Review")
+
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+        visit reviews_path
+        expect(Review.count).to eq(1)
+
+        within "#review-#{review.id}" do
+          click_link("Delete This Review")
+        end
+
+        expect(Review.count).to eq(0)
+        expect(current_path).to eq(review_path)
+      end
     end
   end
 
