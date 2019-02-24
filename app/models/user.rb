@@ -70,12 +70,13 @@ class User < ApplicationRecord
         .limit(limit)
   end
 
-  def self.merchants_by_location_by_fulfillment_time(location)
-    self.joins(:items)
+  def self.merchants_by_my_state_by_fulfillment_time(state)
+    self.joins('join items ON users.id = items.merchant_id')
         .joins('join order_items on items.id = order_items.item_id')
         .joins('join orders on orders.user_id = users.id')
         .where(orders: {status: 1})
         .where(order_items: {fulfilled: true})
+        .where(orders: {users: {state: state}})
         .select('users.*, avg(order_items.updated_at - order_items.created_at) AS fulfillment_time')
         .group(:id)
         .order("fulfillment_time asc")
@@ -105,6 +106,32 @@ class User < ApplicationRecord
         .group(:id)
         .select('users.*, sum(order_items.quantity) AS qty_sold')
         .order("qty_sold DESC")
+        .limit(10)
+  end
+
+  def self.merchants_by_revenue_this_month
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.id = order_items.order_id')
+        .where('orders.status = 1')
+        .where('order_items.fulfilled = true')
+        .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.beginning_of_month, Date.today.end_of_month)
+        .group(:id)
+        .select('users.*, sum(order_items.quantity * order_items.price) AS total')
+        .order("total DESC")
+        .limit(10)
+  end
+
+  def self.merchants_by_revenue_last_month
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.id = order_items.order_id')
+        .where('orders.status = 1')
+        .where('order_items.fulfilled = true')
+        .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.last_month.beginning_of_month, Date.today.beginning_of_month)
+        .group(:id)
+        .select('users.*, sum(order_items.quantity * order_items.price) AS total')
+        .order("total DESC")
         .limit(10)
   end
 
