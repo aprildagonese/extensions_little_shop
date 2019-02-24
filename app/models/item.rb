@@ -20,7 +20,7 @@ class Item < ApplicationRecord
       .where(id: self.id)
       .group(:id)
       .first
-    unless data.nil?
+    unless data.nil? || data == "00:00:00"
       data.avg_time
     else
       'n/a'

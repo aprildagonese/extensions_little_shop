@@ -54,7 +54,11 @@ class ApplicationController < ActionController::Base
     days = time[0..-10]
     hours = time[-8..-7]
     minutes = time[-5..-4]
-    "#{days} #{pluralize(hours, 'hour')} #{pluralize(minutes, 'minute')}"
+    if days.length > 0
+      "#{days}"
+    else
+      "#{pluralize(hours, 'hour')}"
+    end
   end
 
 end
