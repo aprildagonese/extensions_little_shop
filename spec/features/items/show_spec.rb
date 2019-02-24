@@ -19,7 +19,7 @@ RSpec.describe 'items show workflow', type: :feature do
     expect(page).to have_content("Sold by: #{item.user.name}")
     expect(page).to have_content("In stock: #{item.inventory}")
     expect(page).to have_content(number_to_currency(item.price))
-    expect(page).to have_content("Average time to fulfill: 1 day 11 hours 30 minutes")
+    expect(page).to have_content("Average time to fulfill: 1 day")
   end
   it 'shows alternate data if out of stock or never fulfilled' do
     user = create(:user)

@@ -7,14 +7,16 @@ Order.destroy_all
 Item.destroy_all
 User.destroy_all
 
-admin = create(:admin)
-user = create(:user)
-merchant_1 = create(:merchant)
+admin = create(:admin, name: "Admin 1")
+user = create(:user, name: "User 1")
+merchant_1 = create(:merchant, name: "Merchant 1")
 
-merchant_2, merchant_3, merchant_4 = create_list(:merchant, 3)
+merchant_2 = create(:merchant, name: "Merhchant 2")
+merchant_3 = create(:merchant, name: "Merchant 3")
+merchant_4 = create(:merchant, name: "Merchant 4")
 
-inactive_merchant_1 = create(:inactive_merchant)
-inactive_user_1 = create(:inactive_user)
+inactive_merchant_1 = create(:inactive_merchant, name: "Inactive Merchant1")
+inactive_user_1 = create(:inactive_user, name: "Inactive User1")
 
 item_1 = create(:item, user: merchant_1)
 item_2 = create(:item, user: merchant_2)
@@ -48,9 +50,9 @@ create(:fulfilled_order_item, order: order, item: item_1, price: 1, quantity: 1,
 create(:fulfilled_order_item, order: order, item: item_2, price: 2, quantity: 1, created_at: (rng.rand(23)+1).hour.ago, updated_at: rng.rand(59).minutes.ago)
 
 #Test Users
-test_user = create(:user, email: "user@test.com", password: "test")
-test_merch = create(:user, email: "merchant@test.com", password: "test", role: 1)
-test_admin = create(:user, email: "admin@test.com", password: "test", role: 2)
+test_user = create(:user, email: "user@test.com", password: "test", name: "Test User")
+test_merch = create(:user, email: "merchant@test.com", password: "test", role: 1, name: "Test Merch")
+test_admin = create(:user, email: "admin@test.com", password: "test", role: 2, name: "Test Admin")
 item1, item2, item3, item4 = create_list(:item, 4, user: test_merch)
 test_order = create(:order, user: test_user, status: 1)
 test_oi1 = create(:fulfilled_order_item, item: item1, order: test_order)
@@ -59,7 +61,7 @@ test_oi3 = create(:fulfilled_order_item, item: item3, order: test_order)
 test_oi4 = create(:fulfilled_order_item, item: item4, order: test_order)
 
 #Fulfilled Orders w/Reviews From Last Month
-merchant1 = create(:merchant)
+merchant1 = create(:merchant, name: "Merchant 5")
 item1, item2, item3, item4 = create_list(:item, 4, user: merchant1)
 order1, order2, order3 = create_list(:order, 3, user: test_user, status: 1, created_at: 30.days.ago)
 oi1 = create(:fulfilled_order_item, order: order1, item: item1, created_at: 30.days.ago, updated_at: 30.days.ago)
@@ -76,7 +78,7 @@ review4 = create(:review, user: user, order_item: oi4)
 review5 = create(:review, user: test_user, order_item: oi5)
 
 #Fulfilled Orders w/Reviews From This Month
-merchant1 = create(:merchant)
+merchant1 = create(:merchant, name: "Merchant 6")
 item5, item6, item7, item8 = create_list(:item, 4, user: merchant1)
 order6, order7, order8 = create_list(:order, 3, user: test_user, status: 1, created_at: 3.days.ago)
 oi6 = create(:fulfilled_order_item, order: order6, item: item5, created_at: 3.days.ago, updated_at: 2.days.ago)

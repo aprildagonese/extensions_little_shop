@@ -83,20 +83,28 @@ class User < ApplicationRecord
   end
 
   def self.merchants_by_qty_sold_this_month
-    self.joins(items: :order_items)
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.id = order_items.order_id')
+        .where('orders.status = 1')
+        .where('order_items.fulfilled = true')
         .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.beginning_of_month, Date.today.end_of_month)
-        .select('users.*, sum(order_items.quantity) AS qty_sold')
         .group(:id)
-        .order("qty_sold desc")
+        .select('users.*, sum(order_items.quantity) AS qty_sold')
+        .order("qty_sold DESC")
         .limit(10)
   end
 
   def self.merchants_by_qty_sold_last_month
-    self.joins(items: :order_items)
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.id = order_items.order_id')
+        .where('orders.status = 1')
+        .where('order_items.fulfilled = true')
         .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.last_month.beginning_of_month, Date.today.beginning_of_month)
-        .select('users.*, sum(order_items.quantity) AS qty_sold')
         .group(:id)
-        .order("qty_sold desc")
+        .select('users.*, sum(order_items.quantity) AS qty_sold')
+        .order("qty_sold DESC")
         .limit(10)
   end
 

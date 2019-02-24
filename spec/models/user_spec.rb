@@ -44,38 +44,38 @@ RSpec.describe User, type: :model do
       i11 = create(:item, merchant_id: @m11.id)
       i12 = create(:item, merchant_id: @m12.id)
       i13 = create(:item, merchant_id: @m13.id)
-      o1 = create(:completed_order, user: u1)
-      o2 = create(:completed_order, user: u1)
-      o3 = create(:completed_order, user: u1)
+      o1 = create(:completed_order, user: u1, created_at: 30.days.ago)
+      o2 = create(:completed_order, user: u1, created_at: 30.days.ago)
+      o3 = create(:completed_order, user: u1, created_at: 30.days.ago)
       o4 = create(:completed_order, user: u1)
       o5 = create(:cancelled_order, user: u2)
       o6 = create(:completed_order, user: u2)
-      o7 = create(:completed_order, user: u2)
+      o7 = create(:completed_order, user: u2, created_at: 30.days.ago)
       o8 = create(:completed_order, user: u2)
-      o9 = create(:completed_order, user: u3)
-      o10 = create(:completed_order, user: u3)
+      o9 = create(:completed_order, user: u3, created_at: 30.days.ago)
+      o10 = create(:completed_order, user: u3, created_at: 30.days.ago)
       o11 = create(:completed_order, user: u3)
-      o12 = create(:completed_order, user: u3)
+      o12 = create(:completed_order, user: u3, created_at: 30.days.ago)
       o13 = create(:completed_order, user: u3)
-      oi1 = create(:fulfilled_order_item, item: i1, order: o1, created_at: 29.days.ago, quantity: 11)
-      oi2 = create(:fulfilled_order_item, item: i2, order: o2, created_at: 24.days.ago, quantity: 7)
-      oi3 = create(:fulfilled_order_item, item: i3, order: o3, created_at: 27.days.ago, quantity: 12)
+      oi1 = create(:fulfilled_order_item, item: i1, order: o1, created_at: 30.days.ago, quantity: 11)
+      oi2 = create(:fulfilled_order_item, item: i2, order: o2, created_at: 30.days.ago, quantity: 7)
+      oi3 = create(:fulfilled_order_item, item: i3, order: o3, created_at: 30.days.ago, quantity: 12)
       oi4 = create(:order_item, item: i4, order: o4, created_at: 4.days.ago, quantity: 8)
       oi5 = create(:order_item, item: i5, order: o5, created_at: 5.days.ago, quantity: 13)
       oi6 = create(:fulfilled_order_item, item: i6, order: o6, created_at: 3.days.ago, quantity: 3)
-      oi7 = create(:fulfilled_order_item, item: i7, order: o7, created_at: 28.days.ago, quantity: 2)
+      oi7 = create(:fulfilled_order_item, item: i7, order: o7, created_at: 30.days.ago, quantity: 2)
       oi8 = create(:fulfilled_order_item, item: i8, order: o8, created_at: 2.days.ago, quantity: 9)
-      oi9 = create(:fulfilled_order_item, item: i9, order: o9, created_at: 29.days.ago, quantity: 4)
-      oi10 = create(:fulfilled_order_item, item: i10, order: o10, created_at: 29.days.ago, quantity: 6)
+      oi9 = create(:fulfilled_order_item, item: i9, order: o9, created_at: 30.days.ago, quantity: 4)
+      oi10 = create(:fulfilled_order_item, item: i10, order: o10, created_at: 30.days.ago, quantity: 6)
       oi11 = create(:fulfilled_order_item, item: i11, order: o11, created_at: 2.days.ago, quantity: 1)
-      oi12 = create(:fulfilled_order_item, item: i12, order: o12, created_at: 25.days.ago, quantity: 5)
+      oi12 = create(:fulfilled_order_item, item: i12, order: o12, created_at: 30.days.ago, quantity: 5)
       oi13 = create(:fulfilled_order_item, item: i13, order: o13, created_at: 2.days.ago, quantity: 10)
 
-      expected_current_month = [@m5, @m13, @m8, @m4, @m6, @m11]
+      expected_current_month = [@m13, @m8, @m6, @m11]
       expected_last_month = [@m3, @m1, @m2, @m10, @m12, @m9, @m7]
 
       expect(User.merchants_by_qty_sold_this_month).to eq(expected_current_month)
-      expect(User.merchants_by_qty_sold_this_month.first.qty_sold).to eq(13)
+      expect(User.merchants_by_qty_sold_this_month.first.qty_sold).to eq(10)
       expect(User.merchants_by_qty_sold_last_month).to eq(expected_last_month)
       expect(User.merchants_by_qty_sold_last_month.first.qty_sold).to eq(12)
     end
@@ -211,7 +211,7 @@ RSpec.describe User, type: :model do
       end
 
       it ".merchants_by_qty_sold_by_month" do
-        expected_current_month = [@m5, @m13, @m8, @m4, @m6, @m11]
+        expected_current_month = [@m13, @m8, @m6, @m11]
         expected_last_month = [@m3, @m1, @m2, @m10, @m12, @m9, @m7]
 
         expect(User.merchants_by_qty_sold_this_month).to eq(expected_current_month)
@@ -223,7 +223,7 @@ RSpec.describe User, type: :model do
       it ".merchants_by_my_location_by_fulfillment_time" do
         expected_ca = [@m1, @m4, @m9, @m11, @m12]
         expected_or = [@m3, @m6, @m7, @m8]
-        binding.pry
+
         expect(User.merchants_by_location_by_fulfillment_time("state = CA")).to eq(expected_ca)
         expect(User.merchants_by_location_by_fulfillment_time("state = OR")).to eq(expected_or)
       end

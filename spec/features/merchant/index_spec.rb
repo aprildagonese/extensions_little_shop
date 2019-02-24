@@ -136,9 +136,9 @@ RSpec.describe "merchant index workflow", type: :feature do
         visit merchants_path
 
         within("#top-three-merchants-fulfillment") do
-          expect(page).to have_content("#{@m1.name}: 00 hours 05 minutes")
-          expect(page).to have_content("#{@m7.name}: 02 hours 00 minutes")
-          expect(page).to have_content("#{@m2.name}: 2 days 05 hours 30 minutes")
+          expect(page).to have_content("#{@m1.name}: 00 hours")
+          expect(page).to have_content("#{@m7.name}: 02 hours")
+          expect(page).to have_content("#{@m2.name}: 2 days")
         end
       end
 
@@ -146,9 +146,9 @@ RSpec.describe "merchant index workflow", type: :feature do
         visit merchants_path
 
         within("#bottom-three-merchants-fulfillment") do
-          expect(page).to have_content("#{@m3.name}: 6 days 00 hours 00 minutes")
-          expect(page).to have_content("#{@m6.name}: 3 days 00 hours 00 minutes")
-          expect(page).to have_content("#{@m2.name}: 2 days 05 hours 30 minutes")
+          expect(page).to have_content("#{@m3.name}: 6 days")
+          expect(page).to have_content("#{@m6.name}: 3 days")
+          expect(page).to have_content("#{@m2.name}: 2 days")
         end
       end
 
@@ -227,8 +227,6 @@ RSpec.describe "merchant index workflow", type: :feature do
 
         within('#top-merchants-by-qty-last-month') do
           expect(page.all('li')[0]).to have_content("#{@m3.name}: 5 items sold")
-          expect(page.all('li')[1]).to have_content("#{@m4.name}: 4 items sold")
-          expect(page.all('li')[2]).to have_content("#{@m5.name}: 3 items sold")
         end
       end
 
