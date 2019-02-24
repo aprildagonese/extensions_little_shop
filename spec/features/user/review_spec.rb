@@ -93,7 +93,7 @@ RSpec.describe "as a registered user" do
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
         visit profile_order_path(order)
         within "#oitem-#{order_item.id}" do
-          click_link("Edit This Review")
+          click_button("Edit This Review")
         end
 
         expect(current_path).to eq(review_path(review))
@@ -111,7 +111,7 @@ RSpec.describe "as a registered user" do
         visit reviews_path
 
         within "#review-#{review.id}" do
-          click_link("Edit This Review")
+          click_button("Edit This Review")
         end
 
         expect(current_path).to eq(review_path(review))
@@ -139,7 +139,7 @@ RSpec.describe "as a registered user" do
         visit profile_order_path(order)
         expect(Review.count).to eq(1)
         within "#oitem-#{order_item.id}" do
-          click_link("Delete This Review")
+          click_button("Delete This Review")
         end
 
         expect(Review.count).to eq(0)
@@ -159,7 +159,7 @@ RSpec.describe "as a registered user" do
         expect(Review.count).to eq(1)
 
         within "#review-#{review.id}" do
-          click_link("Delete This Review")
+          click_button("Delete This Review")
         end
 
         expect(Review.count).to eq(0)

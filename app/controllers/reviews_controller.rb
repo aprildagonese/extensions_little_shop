@@ -1,4 +1,6 @@
 class ReviewsController < ApplicationController
+  before_action :require_user, only: [:new, :create]
+
   def new
     @order_item = OrderItem.find(params[:order_item])
     @review = Review.new
@@ -19,6 +21,29 @@ class ReviewsController < ApplicationController
 
   def index
     @reviews = Review.my_reviews(current_user)
+  end
+
+  def update
+    @order_item = OrderItem.find(params[:order_item])
+    @review = @order_item.review
+    if @review.update(review_params)
+      flash[:success] = "Your review has been updated."
+      redirect_to reviews_path
+    else
+      flash[:alert] = "Your review could not be updated. Please try again."
+      render :edit
+    end
+  end
+
+  def destroy
+    @review = Review.find(params[:review][:id])
+    if @review.delete
+      flash[:success] = "Your review has been deleted."
+      redirect_to reviews_path
+    else
+      flash[:alert] = "Your review could not be deleted. Please try again."
+      redirect_to reviews_path
+    end
   end
 
   private
