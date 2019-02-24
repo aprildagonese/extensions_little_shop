@@ -27,7 +27,18 @@
       <% end %><br/>
 
       <strong>Average time to fulfill:</strong>
-        <%= item.avg_time_to_fulfill %>!
+        <% unless item.avg_time_to_fulfill == "n/a" %>
+          <%= time_as_words(item.avg_time_to_fulfill) %>
+        <% else %>
+          n/a
+        <% end %>
+      <br/>
+      <strong>Average User Rating:</strong>
+        <% if item.avg_rating > 0 %>
+          <%= item.avg_rating %>
+        <% else %>
+           n/a
+        <% end %>
     </p>
 
     <% if current_reguser? || current_user.nil? %>

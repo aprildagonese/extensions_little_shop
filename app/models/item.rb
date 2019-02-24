@@ -2,6 +2,7 @@ class Item < ApplicationRecord
   belongs_to :user, foreign_key: 'merchant_id'
   has_many :order_items
   has_many :orders, through: :order_items
+  has_many :reviews, through: :order_items
 
   validates_presence_of :name, :description
   validates :price, presence: true, numericality: {
@@ -47,4 +48,9 @@ class Item < ApplicationRecord
       .where(fulfilled: true, orders: {status: :completed}, item_id: self.id)
       .count > 0
   end
+
+  def avg_rating
+    self.reviews.average(:rating).to_f.round(2)
+  end
+
 end

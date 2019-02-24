@@ -47,6 +47,18 @@ order = create(:completed_order, user: user)
 create(:fulfilled_order_item, order: order, item: item_1, price: 1, quantity: 1, created_at: (rng.rand(4)+1).days.ago, updated_at: rng.rand(59).minutes.ago)
 create(:fulfilled_order_item, order: order, item: item_2, price: 2, quantity: 1, created_at: (rng.rand(23)+1).hour.ago, updated_at: rng.rand(59).minutes.ago)
 
+#Test Users#
+test_user = create(:user, email: "user@test.com", password: "test")
+test_merch = create(:user, email: "merchant@test.com", password: "test", role: 1)
+test_admin = create(:user, email: "admin@test.com", password: "test", role: 2)
+item1, item2, item3, item4 = create_list(:item, 4, user: test_merch)
+test_order = create(:order, user: test_user, status: 1)
+test_oi1 = create(:fulfilled_order_item, item: item1, order: test_order)
+test_oi2 = create(:fulfilled_order_item, item: item2, order: test_order)
+test_oi3 = create(:fulfilled_order_item, item: item3, order: test_order)
+test_oi4 = create(:fulfilled_order_item, item: item4, order: test_order)
+
+
 
 
 
