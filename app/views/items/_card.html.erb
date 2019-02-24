@@ -27,10 +27,10 @@
       <% end %><br/>
 
       <strong>Average time to fulfill:</strong>
-        <% unless item.avg_time_to_fulfill == "n/a" %>
-          <%= time_as_words(item.avg_time_to_fulfill) %>
-        <% else %>
+        <% if item.avg_time_to_fulfill == "00:00:00" || item.avg_time_to_fulfill == "n/a" %>
           n/a
+        <% else %>
+          <%= time_as_words(item.avg_time_to_fulfill) %>
         <% end %>
       <br/>
       <strong>Average User Rating:</strong>
