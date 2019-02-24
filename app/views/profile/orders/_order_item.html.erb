@@ -15,7 +15,7 @@
       <h5>Your Review: <%= oitem.review.title %></h5>
       <p>Description: <%= oitem.review.description %></p>
       <p>Your Rating: <%= oitem.review.rating %></p>
-      <p>Updated On: <%= oitem.review.updated_at %> <% if oitem.review.updated_at %><% end %></p>
+      <p>Updated On: <%= oitem.review.updated_at.to_date.to_s %></p>
       <%= button_to "Edit This Review", review_path(oitem.review), method: :patch %>
       <%= button_to "Delete This Review", review_path(oitem.review), method: :delete %>
     <% end %>
