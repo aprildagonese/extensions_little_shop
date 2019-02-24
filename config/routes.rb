@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create, :update]
 
-  resources :reviews, only: [:new, :create, :index, :update, :destroy]
+  resources :reviews, only: [:new, :create, :index, :update, :destroy, :edit]
 
   get '/cart', to: 'cart#show'
   post '/cart/item/:id', to: 'cart#add', as: :cart_item

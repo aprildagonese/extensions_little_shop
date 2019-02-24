@@ -23,6 +23,11 @@ class ReviewsController < ApplicationController
     @reviews = Review.my_reviews(current_user)
   end
 
+  def edit
+    @review = Review.find(params[:id])
+    @order_item = @review.order_item
+  end
+
   def update
     @order_item = OrderItem.find(params[:order_item])
     @review = @order_item.review
@@ -36,7 +41,7 @@ class ReviewsController < ApplicationController
   end
 
   def destroy
-    @review = Review.find(params[:review][:id])
+    @review = Review.find(params[:id])
     if @review.delete
       flash[:success] = "Your review has been deleted."
       redirect_to reviews_path
