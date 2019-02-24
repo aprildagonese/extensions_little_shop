@@ -23,6 +23,25 @@ RSpec.describe 'items index workflow', type: :feature do
         expect(page).to_not have_content(item.name)
       end
     end
-  end
 
+    it "displays average review for each item" do
+      item1 = create(:item)
+      user = create(:user)
+      order1 = create(:order, status: 1, user: user)
+      order2 = create(:order, status: 1, user: user)
+      order3 = create(:order, status: 1, user: user)
+      oi1 = create(:fulfilled_order_item, order: order1, item: item1)
+      oi2 = create(:fulfilled_order_item, order: order2, item: item1)
+      oi3 = create(:fulfilled_order_item, order: order3, item: item1)
+      review1 = create(:review, user: user, order_item: oi1, rating: 5)
+      review2 = create(:review, user: user, order_item: oi2, rating: 3)
+      review3 = create(:review, user: user, order_item: oi3, rating: 1)
+
+      visit items_path
+
+      within "#item-#{item1.id}" do
+        expect(page).to have_content("Average Rating: 3")
+      end
+    end
+  end
 end
