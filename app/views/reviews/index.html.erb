@@ -1,0 +1,16 @@
+<h1>My Reviews</h1>
+
+<% unless @reviews.nil? %>
+  <% @reviews.each do |review| %>
+    <section id="review-<%=review.id%>">
+      <h5>Your Review: <%= review.title %></h5>
+      <p>Item: <%= link_to "#{review.item.name}", item_path(review.item) %></p>
+      <p>Ordered On: <%= review.order.created_at.to_date.to_s %>
+      <p>Description: <%= review.description %></p>
+      <p>Your Rating: <%= review.rating %></p>
+      <p>Updated On: <%= review.updated_at %> <% if review.updated_at %><% end %></p>
+      <%= button_to "Edit This Review", review_path(review), method: :patch %>
+      <%= button_to "Delete This Review", review_path(review), method: :delete %>
+    </section>
+  <% end %>
+<% end %>

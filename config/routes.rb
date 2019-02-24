@@ -25,10 +25,10 @@ Rails.application.routes.draw do
 
   resources :items, only: [:index, :show]
 
+  resources :reviews, only: [:index, :update, :destroy]
   resources :order_items, only: [] do
     resources :reviews, only: [:new, :create]
   end
-  resources :reviews, only: [:index]
 
   scope :dashboard, as: :dashboard do
     get '/', to: 'merchants#show'

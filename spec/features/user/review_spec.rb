@@ -58,7 +58,6 @@ RSpec.describe "as a registered user" do
       order_item2 = create(:fulfilled_order_item, order: order2, item: item)
       review = create(:review, user: user, order_item: order_item)
       review2 = create(:review, user: user, order_item: order_item2)
-      review2 = update(rating: 4)
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
       visit profile_path
@@ -78,7 +77,7 @@ RSpec.describe "as a registered user" do
         expect(page).to have_content("Your Review: #{review2.title}")
         expect(page).to have_content("Description: #{review2.description}")
         expect(page).to have_content("Rating: #{review2.rating}")
-        expect(page).to have_content("Updated on:")
+        expect(page).to_not have_content("Updated on:")
         expect(page).to have_button("Edit This Review")
       end
 
