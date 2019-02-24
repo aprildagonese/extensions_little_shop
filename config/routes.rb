@@ -27,7 +27,8 @@ Rails.application.routes.draw do
 
   resources :order_items, only: [] do
     resources :reviews, only: [:new, :create]
-  end 
+  end
+  resources :reviews, only: [:index]
 
   scope :dashboard, as: :dashboard do
     get '/', to: 'merchants#show'
