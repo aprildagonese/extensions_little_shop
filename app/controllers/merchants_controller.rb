@@ -18,6 +18,8 @@ class MerchantsController < ApplicationController
     @top_merchants_by_qty_last_month = User.merchants_by_qty_sold_last_month
     @top_merchants_by_revenue_this_month = User.merchants_by_revenue_this_month
     @top_merchants_by_revenue_last_month = User.merchants_by_revenue_last_month
+    @top_merchants_to_my_state
+    @top_merchants_to_my_city
   end
 
   def show

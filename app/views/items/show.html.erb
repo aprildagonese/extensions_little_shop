@@ -1,7 +1,7 @@
 <%= render partial: "card", locals: {item: @item, img_width: 300}%>
 
 <%= tag.div class: "card float-center review-panel" do %>
-  <h2>Item Reviews<h2>
+  <h2>User Reviews of <%= @item.name %><h2>
     <% @item.reviews.each do |review| %>
       <%= tag.section class: "review-card review-#{review.id}" do %>
         <p><%= tag.h5 class: "review-title" do %>

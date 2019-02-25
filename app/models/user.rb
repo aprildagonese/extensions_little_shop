@@ -73,13 +73,13 @@ class User < ApplicationRecord
   def self.merchants_by_my_state_by_fulfillment_time(state)
     self.joins('join items ON users.id = items.merchant_id')
         .joins('join order_items on items.id = order_items.item_id')
-        .joins('join orders on orders.user_id = users.id')
+        .joins('join orders on users.id = orders.user_id')
         .where(orders: {status: 1})
         .where(order_items: {fulfilled: true})
         .where(orders: {users: {state: state}})
-        .select('users.*, avg(order_items.updated_at - order_items.created_at) AS fulfillment_time')
+        .select('users.*, avg(order_items.updated_at - order_items.created_at) AS state_fulfillment_time')
         .group(:id)
-        .order("fulfillment_time asc")
+        .order("state_fulfillment_time asc")
         .limit(5)
   end
 
