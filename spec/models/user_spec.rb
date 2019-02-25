@@ -225,9 +225,9 @@ RSpec.describe User, type: :model do
         expected_last_month = [@m3, @m1, @m2, @m10, @m12, @m9, @m7]
 
         expect(User.merchants_by_revenue_this_month).to eq(expected_current_month)
-        expect(User.merchants_by_revenue_this_month.first.total).to eq(10.00)
+        expect(User.merchants_by_revenue_this_month.first.revenue_this_month).to eq(10.00)
         expect(User.merchants_by_revenue_last_month).to eq(expected_last_month)
-        expect(User.merchants_by_revenue_last_month.first.total).to eq(12.00)
+        expect(User.merchants_by_revenue_last_month.first.revenue_last_month).to eq(12.00)
       end
 
       xit ".merchants_by_my_state_by_fulfillment_time" do

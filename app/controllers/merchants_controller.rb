@@ -16,8 +16,8 @@ class MerchantsController < ApplicationController
     #-------
     @top_merchants_by_qty_current_month = User.merchants_by_qty_sold_this_month
     @top_merchants_by_qty_last_month = User.merchants_by_qty_sold_last_month
-    @top_merchants_by_fulfillment = User.where(role: 1).where(active: true).limit(10)
-    @bottom_merchants_by_fulfillment = User.where(role: 1).where(active: true).limit(10)
+    @top_merchants_by_revenue_this_month = User.merchants_by_revenue_this_month
+    @top_merchants_by_revenue_last_month = User.merchants_by_revenue_last_month
   end
 
   def show

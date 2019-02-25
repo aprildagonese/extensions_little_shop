@@ -65,19 +65,19 @@
         <% end %>
       </ul>
     <% end %>
-    <%= tag.section id: "top-merchants-by-qty-fulfilled-this-month", class: "card-body float-left m-2" do %>
-      <h5 class="card-title">Top Merchants by Items Fulfilled This Month</h5>
+    <%= tag.section id: "top-merchants-by-revenue-this-month", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Top Merchants by Revenue This Month</h5>
       <ul>
-        <% @top_merchants_by_fulfillment.each do |merchant| %>
-          <li><%= link_to merchant.name, merchant_path(merchant) %>: Items Fulfilled</li>
+        <% @top_merchants_by_revenue_this_month.each do |merchant| %>
+          <li><%= link_to merchant.name, merchant_path(merchant) %>: <%= number_to_currency(merchant.revenue_this_month) %> sold</li>
         <% end %>
       </ul>
     <% end %>
-    <%= tag.section id: "top-merchants-by-qty-fulfilled-last-month", class: "card-body float-left m-2" do %>
-      <h5 class="card-title">Top Merchants by Items Fulfilled Last Month</h5>
+    <%= tag.section id: "top-merchants-by-revenue-last-month", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Top Merchants by Revenue Last Month</h5>
       <ul>
-        <% @bottom_merchants_by_fulfillment.each do |merchant| %>
-          <li><%= link_to merchant.name, merchant_path(merchant) %>: Items Fulfilled</li>
+        <% @top_merchants_by_revenue_last_month.each do |merchant| %>
+          <li><%= link_to merchant.name, merchant_path(merchant) %>: <%= number_to_currency(merchant.revenue_last_month) %> sold</li>
         <% end %>
       </ul>
     <% end %>

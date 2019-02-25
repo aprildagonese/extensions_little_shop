@@ -117,8 +117,8 @@ class User < ApplicationRecord
         .where('order_items.fulfilled = true')
         .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.beginning_of_month, Date.today.end_of_month)
         .group(:id)
-        .select('users.*, sum(order_items.quantity * order_items.price) AS total')
-        .order("total DESC")
+        .select('users.*, sum(order_items.quantity * order_items.price) AS revenue_this_month')
+        .order("revenue_this_month DESC")
         .limit(10)
   end
 
@@ -130,8 +130,8 @@ class User < ApplicationRecord
         .where('order_items.fulfilled = true')
         .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.last_month.beginning_of_month, Date.today.beginning_of_month)
         .group(:id)
-        .select('users.*, sum(order_items.quantity * order_items.price) AS total')
-        .order("total DESC")
+        .select('users.*, sum(order_items.quantity * order_items.price) AS revenue_last_month')
+        .order("revenue_last_month DESC")
         .limit(10)
   end
 
