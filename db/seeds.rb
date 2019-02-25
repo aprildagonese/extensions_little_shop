@@ -30,11 +30,11 @@ inactive_item_2 = create(:inactive_item, user: inactive_merchant_1)
 Random.new_seed
 rng = Random.new
 
-order = create(:completed_order, user: user)
-create(:fulfilled_order_item, order: order, item: item_1, price: 1, quantity: 1, created_at: (rng.rand(3)+1).days.ago, updated_at: rng.rand(59).minutes.ago)
-create(:fulfilled_order_item, order: order, item: item_2, price: 2, quantity: 1, created_at: (rng.rand(23)+1).hour.ago, updated_at: rng.rand(59).minutes.ago)
-create(:fulfilled_order_item, order: order, item: item_3, price: 3, quantity: 1, created_at: (rng.rand(5)+1).days.ago, updated_at: rng.rand(59).minutes.ago)
-create(:fulfilled_order_item, order: order, item: item_4, price: 4, quantity: 1, created_at: (rng.rand(23)+1).hour.ago, updated_at: rng.rand(59).minutes.ago)
+order = create(:completed_order, user: user, created_at: 30.days.ago, updated_at: 30.days.ago)
+create(:fulfilled_order_item, order: order, item: item_1, price: 1, quantity: 1, created_at: 30.days.ago, updated_at: 29.days.ago)
+create(:fulfilled_order_item, order: order, item: item_2, price: 2, quantity: 1, created_at: 30.days.ago, updated_at: 28.days.ago)
+create(:fulfilled_order_item, order: order, item: item_3, price: 3, quantity: 1, created_at: 30.days.ago, updated_at: 29.days.ago)
+create(:fulfilled_order_item, order: order, item: item_4, price: 4, quantity: 1, created_at: 30.days.ago, updated_at: 28.days.ago)
 
 # pending order
 order = create(:order, user: user)
