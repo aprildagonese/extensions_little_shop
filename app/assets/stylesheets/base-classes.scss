@@ -6,6 +6,8 @@
 
 .item-card {
   width: 18rem;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .user-card {
@@ -18,4 +20,18 @@
 
 .order-item-card {
   width: 18rem;
+}
+
+.review-panel {
+  display: flex;
+  padding: 1.25rem;
+  margin: 0;
+}
+
+.container {
+  padding-top: 2rem;
+}
+
+.review-card {
+  margin-bottom: 2rem;
 }
