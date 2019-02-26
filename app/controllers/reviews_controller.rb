@@ -14,7 +14,7 @@ class ReviewsController < ApplicationController
       flash[:message] = "Your review has been created."
       redirect_to profile_order_path(@order_item.order)
     else
-      flash[:alert] = "There was a problem saving your review. Please try again."
+      flash[:alert] = "Please enter a rating between 1 and 5."
       render :new
     end
   end

@@ -44,6 +44,27 @@ RSpec.describe "as a registered user" do
       expect(page).to have_content("Your Rating: #{review.rating}")
       expect(page).to have_button("Edit This Review")
     end
+
+    it "by entering valid information" do
+      user = create(:user)
+      merchant = create(:merchant)
+      item = create(:item, user: merchant)
+      order = create(:order, user: user, status: 1)
+      order_item = create(:fulfilled_order_item, order: order, item: item)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+      visit new_review_path(order_item: order_item)
+      expect(Review.count).to eq(0)
+
+      fill_in "Title", with: "Great item!"
+      fill_in "Description", with: "This item was exactly what I needed."
+      fill_in "Rating", with: 8
+
+      click_on "Create Review"
+
+      expect(page).to have_content("Please enter a rating between 1 and 5.")
+      expect(Review.count).to eq(0)
+    end
   end
 
   context "I can see all of my reviews" do
