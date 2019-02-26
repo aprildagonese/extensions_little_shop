@@ -92,8 +92,8 @@
       <%= tag.section id: "top-merchants-my-state", class: "card-body float-left m-2" do %>
         <h5 class="card-title">Top Sellers to <%= current_user.state %></h5>
         <ul>
-          <% @top_merchants_by_revenue_this_month.each do |merchant| %>
-            <li><%= link_to merchant.name, merchant_path(merchant) %>: <%= number_to_currency(merchant.revenue_this_month) %> sold</li>
+          <% @top_merchants_to_my_state.each do |merchant| %>
+            <li><%= link_to merchant.name, merchant_path(merchant) %>: <%= time_as_words(merchant.fulfillment_time) %></li>
           <% end %>
         </ul>
       <% end %>
@@ -101,7 +101,7 @@
         <h5 class="card-title">Top Sellers to <%= current_user.city %>, <%= current_user.state %></h5>
         <ul>
           <% @top_merchants_by_revenue_last_month.each do |merchant| %>
-            <li><%= link_to merchant.name, merchant_path(merchant) %>: <%= number_to_currency(merchant.revenue_last_month) %> sold</li>
+            <li><%= link_to merchant.name, merchant_path(merchant) %>: </li>
           <% end %>
         </ul>
       <% end %>

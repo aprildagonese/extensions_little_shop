@@ -229,16 +229,16 @@ RSpec.describe "merchant index workflow", type: :feature do
         @o13 = create(:completed_order, user: @u13)
         @oi1 = create(:fulfilled_order_item, item: @i1, order: @o1, created_at: 30.days.ago, quantity: 11, price: 1.00)
         @oi2 = create(:fulfilled_order_item, item: @i2, order: @o2, created_at: 30.days.ago, quantity: 7, price: 1.00)
-        @oi3 = create(:fulfilled_order_item, item: @i3, order: @o3, created_at: 30.days.ago, quantity: 12, price: 1.00)
+        @oi3 = create(:fulfilled_order_item, item: @i3, order: @o3, created_at: 30.days.ago, updated_at: 10.days.ago, quantity: 12, price: 1.00)
         @oi4 = create(:order_item, item: @i4, order: @o4, created_at: 4.days.ago, quantity: 8, price: 1.00)
         @oi5 = create(:order_item, item: @i5, order: @o5, created_at: 5.days.ago, quantity: 13, price: 1.00)
         @oi6 = create(:fulfilled_order_item, item: @i6, order: @o6, created_at: 3.days.ago, quantity: 3, price: 1.00)
-        @oi7 = create(:fulfilled_order_item, item: @i7, order: @o7, created_at: 30.days.ago, quantity: 2, price: 1.00)
+        @oi7 = create(:fulfilled_order_item, item: @i7, order: @o7, created_at: 30.days.ago, updated_at: 2.days.ago, quantity: 2, price: 1.00)
         @oi8 = create(:fulfilled_order_item, item: @i8, order: @o8, created_at: 2.days.ago, quantity: 9, price: 1.00)
-        @oi9 = create(:fulfilled_order_item, item: @i9, order: @o9, created_at: 30.days.ago, quantity: 4, price: 1.00)
+        @oi9 = create(:fulfilled_order_item, item: @i9, order: @o9, created_at: 30.days.ago, updated_at: 25.days.ago, quantity: 4, price: 1.00)
         @oi10 = create(:fulfilled_order_item, item: @i10, order: @o10, created_at: 30.days.ago, quantity: 6, price: 1.00)
-        @oi11 = create(:fulfilled_order_item, item: @i11, order: @o11, created_at: 2.days.ago, quantity: 1, price: 1.00)
-        @oi12 = create(:fulfilled_order_item, item: @i12, order: @o12, created_at: 30.days.ago, quantity: 5, price: 1.00)
+        @oi11 = create(:fulfilled_order_item, item: @i11, order: @o11, created_at: 2.days.ago, updated_at: 1.days.ago, quantity: 1, price: 1.00)
+        @oi12 = create(:fulfilled_order_item, item: @i12, order: @o12, created_at: 30.days.ago, updated_at: 27.days.ago, quantity: 5, price: 1.00)
         @oi13 = create(:fulfilled_order_item, item: @i13, order: @o13, created_at: 2.days.ago, quantity: 10, price: 1.00)
       end
       it 'shows top merchant by items sold by month' do
@@ -284,20 +284,26 @@ RSpec.describe "merchant index workflow", type: :feature do
 
       end
 
-      xit 'shows top merchants by items fulfilled by month' do
+      it 'shows top merchants to my location by fulfillment time' do
+        login_as(@u1)
         visit merchants_path
 
-        within('#top-merchants-by-qty-fulfilled-this-month') do
-          expect(page.all('li')[0]).to have_content("#{@u3.name}: $72.00")
-          expect(page.all('li')[1]).to have_content("#{@u1.name}: $33.00")
-          expect(page.all('li')[2]).to have_content("#{@u2.name}: $31.50")
+        expected_ca = [@m11, @m12, @m9, @m1]
+        expected_or = [@m8, @m6, @m7, @m3]
+
+        within('#top-merchants-my-state') do
+          expect(page.all('li')[0]).to have_content("#{@m11.name}: 1 day")
+          expect(page.all('li')[1]).to have_content("#{@m12.name}: 3 days")
+          expect(page.all('li')[2]).to have_content("#{@m9.name}: 5 days")
+          expect(page.all('li')[3]).to have_content("#{@m1.name}: 30 days")
         end
 
-        within('#top-merchants-by-qty-fulfilled-last-month') do
-          expect(page.all('li')[0]).to have_content("#{@u3.name}: $72.00")
-          expect(page.all('li')[1]).to have_content("#{@u1.name}: $33.00")
-          expect(page.all('li')[2]).to have_content("#{@u2.name}: $31.50")
-        end
+        # within('#top-merchants-my-city') do
+        #   expect(page.all('li')[0]).to have_content("#{@m3.name}: #{@m3.fulfillment_time}")
+        #   expect(page.all('li')[1]).to have_content("#{@m7.name}: #{@m7.fulfillment_time}")
+        #   expect(page.all('li')[2]).to have_content("#{@m6.name}: #{@m6.fulfillment_time}")
+        #   expect(page.all('li')[3]).to have_content("#{@m8.name}: #{@m8.fulfillment_time}")
+        # end
       end
 
     end
