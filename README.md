@@ -52,7 +52,7 @@ We provide demo accounts to help users explore the application. Please use the f
 - `merchant@test.com`
 
 ## Contribute
-To contribute to Little Shop, please fork the repository at https://github.com/aprildagonese/extensions_little_shop and make a pull request back to the original repo.
+To contribute to Little Shop, please fork the repository at https://github.com/aprildagonese/extensions_little_shop and make a pull request back to the `development` branch of the repo.
 
 ## Credits
 The developers of Little Shop Extensions would like to thank their instructors, Ian Douglas and Megan McMahon, for their help and support in the completion of the project.
