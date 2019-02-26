@@ -31,10 +31,10 @@ The implementation of User Reviews required moderate changes to the database, wi
 - [Ruby on Rails](https://rubyonrails.org/)
 
 ## Installation
-Little Shop of Hors d'Oeurves was built on Rails 5.1.6.1 and using PostgreSQL. It runs using 'bcrypt' for authentication. Please ensure that local environments are compatible before cloning down.
+Little Shop Extensions was built on Rails 5.1.6.1 and using PostgreSQL. It runs using 'bcrypt' for authentication. Please ensure that local environments are compatible before cloning down.
 
 Installation Steps:
-1. Fork and clone the repository at https://github.com/aprildagonese/little_shop
+1. Fork and clone the repository at https://github.com/aprildagonese/extensions_little_shop
 2. Run `bundle install`
 3. Run `rake db:{create,migrate,seed}`
 4. To run locally in development mode, run `rails s` in your terminal; then go to `localhost:3000` in your browser.
