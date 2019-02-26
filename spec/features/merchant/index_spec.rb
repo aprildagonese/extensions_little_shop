@@ -227,7 +227,7 @@ RSpec.describe "merchant index workflow", type: :feature do
         @o11 = create(:completed_order, user: @u11)
         @o12 = create(:completed_order, user: @u12, created_at: 30.days.ago)
         @o13 = create(:completed_order, user: @u13)
-        @oi1 = create(:fulfilled_order_item, item: @i1, order: @o1, created_at: 30.days.ago, quantity: 11, price: 1.00)
+        @oi1 = create(:fulfilled_order_item, item: @i1, order: @o1, created_at: 30.days.ago, updated_at: 5.days.ago, quantity: 11, price: 1.00)
         @oi2 = create(:fulfilled_order_item, item: @i2, order: @o2, created_at: 30.days.ago, quantity: 7, price: 1.00)
         @oi3 = create(:fulfilled_order_item, item: @i3, order: @o3, created_at: 30.days.ago, updated_at: 10.days.ago, quantity: 12, price: 1.00)
         @oi4 = create(:order_item, item: @i4, order: @o4, created_at: 4.days.ago, quantity: 8, price: 1.00)
@@ -289,21 +289,19 @@ RSpec.describe "merchant index workflow", type: :feature do
         visit merchants_path
 
         expected_ca = [@m11, @m12, @m9, @m1]
-        expected_or = [@m8, @m6, @m7, @m3]
+        expected_SF = [@m12, @m1]
 
         within('#top-merchants-my-state') do
           expect(page.all('li')[0]).to have_content("#{@m11.name}: 1 day")
           expect(page.all('li')[1]).to have_content("#{@m12.name}: 3 days")
           expect(page.all('li')[2]).to have_content("#{@m9.name}: 5 days")
-          expect(page.all('li')[3]).to have_content("#{@m1.name}: 30 days")
+          expect(page.all('li')[3]).to have_content("#{@m1.name}: 25 days")
         end
 
-        # within('#top-merchants-my-city') do
-        #   expect(page.all('li')[0]).to have_content("#{@m3.name}: #{@m3.fulfillment_time}")
-        #   expect(page.all('li')[1]).to have_content("#{@m7.name}: #{@m7.fulfillment_time}")
-        #   expect(page.all('li')[2]).to have_content("#{@m6.name}: #{@m6.fulfillment_time}")
-        #   expect(page.all('li')[3]).to have_content("#{@m8.name}: #{@m8.fulfillment_time}")
-        # end
+        within('#top-merchants-my-city') do
+          expect(page.all('li')[0]).to have_content("#{@m12.name}: 3 days")
+          expect(page.all('li')[1]).to have_content("#{@m1.name}: 25 days")
+        end
       end
 
     end

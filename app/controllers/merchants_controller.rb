@@ -20,8 +20,8 @@ class MerchantsController < ApplicationController
     @top_merchants_by_revenue_last_month = User.merchants_by_revenue_last_month
     if current_reguser?
       @top_merchants_to_my_state = User.merchants_by_state_by_fulfillment_time(current_user.state)
-      #@top_merchants_to_my_city = User.merchants_by_city_by_fulfillment_time(current_user.state, current_user.city)
-    end 
+      @top_merchants_to_my_city = User.merchants_by_city_by_fulfillment_time(current_user.city, current_user.state)
+    end
   end
 
   def show

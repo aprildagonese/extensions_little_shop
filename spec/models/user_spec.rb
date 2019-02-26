@@ -195,7 +195,7 @@ RSpec.describe User, type: :model do
         @o11 = create(:completed_order, user: @u11)
         @o12 = create(:completed_order, user: @u12, created_at: 30.days.ago)
         @o13 = create(:completed_order, user: @u13)
-        @oi1 = create(:fulfilled_order_item, item: @i1, order: @o1, created_at: 30.days.ago, quantity: 11, price: 1.00)
+        @oi1 = create(:fulfilled_order_item, item: @i1, order: @o1, created_at: 30.days.ago, updated_at: 5.days.ago, quantity: 11, price: 1.00)
         @oi2 = create(:fulfilled_order_item, item: @i2, order: @o2, created_at: 30.days.ago, quantity: 7, price: 1.00)
         @oi3 = create(:fulfilled_order_item, item: @i3, order: @o3, created_at: 30.days.ago, updated_at: 10.days.ago, quantity: 12, price: 1.00)
         @oi4 = create(:order_item, item: @i4, order: @o4, created_at: 4.days.ago, quantity: 8, price: 1.00)
@@ -241,8 +241,10 @@ RSpec.describe User, type: :model do
         expect(User.merchants_by_state_by_fulfillment_time("OR")).to eq(expected_or)
       end
 
-      xit ".top_merchants_by_my_city_by_fulfillment_time" do
-        expect(User.top_merchants_by_fulfillment_time(3)).to eq([@m1, @m7, @m6])
+      it ".top_merchants_by_my_city_by_fulfillment_time" do
+        expected_SF = [@m12, @m1]
+
+        expect(User.merchants_by_city_by_fulfillment_time("San Francisco", "CA")).to eq(expected_SF)
       end
 
     end

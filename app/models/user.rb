@@ -70,19 +70,30 @@ class User < ApplicationRecord
         .limit(limit)
   end
 
-  def self.merchants_by_my_location_by_fulfillment_time(user)
-
-
-    merchant_ids = Item.joins(:order_items).joins(:orders).joins("join users ON orders.user_id = users.id").where(order_items: {fulfilled: true}).where(users: {state: "State 2"}).distinct.pluck(:merchant_id)
-    merchants = User.where(id: merch_ids)
-  end
-
   def self.merchants_by_state_by_fulfillment_time(state)
     merchant_ids = Item.joins(:order_items)
                        .joins(:orders)
                        .joins("join users ON orders.user_id = users.id")
                        .where(order_items: {fulfilled: true})
                        .where(users: {state: state})
+                       .distinct
+                       .pluck(:merchant_id)
+    merchants = User.joins(:items)
+                    .joins("join order_items ON items.id = order_items.item_id")
+                    .group(:id)
+                    .select('users.*, avg(order_items.updated_at - order_items.created_at) AS fulfillment_time')
+                    .where(id: merchant_ids)
+                    .order("fulfillment_time asc")
+                    .limit(5)
+  end
+
+  def self.merchants_by_city_by_fulfillment_time(city, state)
+    merchant_ids = Item.joins(:order_items)
+                       .joins(:orders)
+                       .joins("join users ON orders.user_id = users.id")
+                       .where(order_items: {fulfilled: true})
+                       .where(users: {state: state})
+                       .where(users: {city: city})
                        .distinct
                        .pluck(:merchant_id)
     merchants = User.joins(:items)
