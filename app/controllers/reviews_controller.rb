@@ -35,7 +35,7 @@ class ReviewsController < ApplicationController
       flash[:success] = "Your review has been updated."
       redirect_to reviews_path
     else
-      flash[:alert] = "Your review could not be updated. Please try again."
+      flash[:alert] = "Please enter a rating between 1 and 5."
       render :edit
     end
   end
@@ -44,9 +44,6 @@ class ReviewsController < ApplicationController
     @review = Review.find(params[:id])
     if @review.delete
       flash[:success] = "Your review has been deleted."
-      redirect_to reviews_path
-    else
-      flash[:alert] = "Your review could not be deleted. Please try again."
       redirect_to reviews_path
     end
   end

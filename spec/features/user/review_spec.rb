@@ -146,6 +146,27 @@ RSpec.describe "as a registered user" do
         end
 
       end
+
+      it "by entering valid information" do
+        user = create(:user)
+        merchant = create(:merchant)
+        item = create(:item, user: merchant)
+        order = create(:order, user: user, status: 1)
+        order_item = create(:fulfilled_order_item, order: order, item: item)
+        review = create(:review, user: user, order_item: order_item, title: "My Review")
+
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+        visit reviews_path
+
+        within "#review-#{review.id}" do
+          click_button("Edit This Review")
+        end
+
+        fill_in "Rating", with: 8
+        click_on "Update Review"
+
+        expect(page).to have_content("Please enter a rating between 1 and 5.")
+      end
     end
     context "I can delete one of my reviews" do
       it "from the reviews index" do
