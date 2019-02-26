@@ -17,7 +17,7 @@ RSpec.describe 'admin users index workflow', type: :feature do
       @active_users.each do |user|
         within "#user-#{user.id}" do
           expect(page).to have_link(user.name)
-          expect(page).to have_content("Registration Date: #{user.created_at}")
+          expect(page).to have_content("Registration Date: #{user.created_at.to_date.to_s}")
           expect(page).to have_button('Disable')
           expect(page).to_not have_button('Enable')
         end
@@ -25,7 +25,7 @@ RSpec.describe 'admin users index workflow', type: :feature do
       @inactive_users.each do |user|
         within "#user-#{user.id}" do
           expect(page).to have_link(user.name)
-          expect(page).to have_content("Registration Date: #{user.created_at}")
+          expect(page).to have_content("Registration Date: #{user.created_at.to_date.to_s}")
           expect(page).to_not have_button('Disable')
           expect(page).to have_button('Enable')
         end

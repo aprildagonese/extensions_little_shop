@@ -22,7 +22,7 @@ RSpec.describe "merchant index workflow", type: :feature do
         within("#merchant-#{@merchant_1.id}") do
           expect(page).to have_content(@merchant_1.name)
           expect(page).to have_content("#{@merchant_1.city}, #{@merchant_1.state}")
-          expect(page).to have_content("Registered Date: #{@merchant_1.created_at}")
+          expect(page).to have_content("Registered Date: #{@merchant_1.created_at.to_date.to_s}")
           if @am_admin
             expect(page).to have_button('Disable Merchant')
           end
@@ -31,7 +31,7 @@ RSpec.describe "merchant index workflow", type: :feature do
         within("#merchant-#{@merchant_2.id}") do
           expect(page).to have_content(@merchant_2.name)
           expect(page).to have_content("#{@merchant_2.city}, #{@merchant_2.state}")
-          expect(page).to have_content("Registered Date: #{@merchant_2.created_at}")
+          expect(page).to have_content("Registered Date: #{@merchant_2.created_at.to_date.to_s}")
           if @am_admin
             expect(page).to have_button('Disable Merchant')
           end
