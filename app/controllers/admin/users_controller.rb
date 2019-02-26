@@ -20,6 +20,7 @@ class Admin::UsersController < Admin::BaseController
 
   def update
     @user = User.find(params[:id])
+    @form_path = [:admin, @user]
     if @user.update(user_params)
       flash[:success] = "Profile has been updated"
       redirect_to admin_user_path(@user)
@@ -32,7 +33,7 @@ class Admin::UsersController < Admin::BaseController
     user.save
     redirect_to admin_users_path
   end
-  
+
   def disable
     user = User.find(params[:id])
     set_active_flag(user, false)
