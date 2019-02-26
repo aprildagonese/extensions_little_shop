@@ -11,8 +11,10 @@ Mod 2 of the backend program trains students to build out web applications in Ru
 ## User Reviews
 User Reviews are now accessible via a user's profile order show page:
 ![Profile Order Show Page](app/assets/images/order-review.png "Profile Order Show Page")
+
 As well as on the show page of the item itself:
 ![Item Show Page](app/assets/images/item-reviews.png "Item Show Page")
+
 Additionally, there is now a "My Reviews" link on the user's Profile page, which allows them to view and edit the reviews they've written for all items:
 ![My Reviews](app/assets/images/my-reviews.png "My Reviews")
 
