@@ -13,6 +13,15 @@ class MerchantsController < ApplicationController
     @top_states_by_order_count = User.top_user_states_by_order_count(3)
     @top_cities_by_order_count = User.top_user_cities_by_order_count(3)
     @top_orders_by_items_shipped = Order.sorted_by_items_shipped(3)
+    #-------
+    @top_merchants_by_qty_current_month = User.merchants_by_qty_sold_this_month
+    @top_merchants_by_qty_last_month = User.merchants_by_qty_sold_last_month
+    @top_merchants_by_revenue_this_month = User.merchants_by_revenue_this_month
+    @top_merchants_by_revenue_last_month = User.merchants_by_revenue_last_month
+    if current_reguser?
+      @top_merchants_to_my_state = User.merchants_by_state_by_fulfillment_time(current_user.state)
+      @top_merchants_to_my_city = User.merchants_by_city_by_fulfillment_time(current_user.city, current_user.state)
+    end
   end
 
   def show

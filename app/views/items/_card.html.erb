@@ -1,4 +1,4 @@
-<%= tag.div class: "card float-left m-3 item-card" do %>
+<%= tag.div class: "card float-left item-card" do %>
   <%= tag.a href: item_path(item) do %>
     <%= image_tag item.image,
       alt: "image for #{item.name}",
@@ -27,7 +27,18 @@
       <% end %><br/>
 
       <strong>Average time to fulfill:</strong>
-        <%= item.avg_time_to_fulfill %>!
+        <% if item.avg_time_to_fulfill == "n/a" %>
+          n/a
+        <% else %>
+          <%= time_as_words(item.avg_time_to_fulfill) %>
+        <% end %>
+      <br/>
+      <strong>Average User Rating:</strong>
+        <% if item.avg_rating > 0 %>
+          <%= item.avg_rating %>
+        <% else %>
+           n/a
+        <% end %>
     </p>
 
     <% if current_reguser? || current_user.nil? %>

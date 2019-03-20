@@ -15,6 +15,7 @@ RSpec.describe Item, type: :model do
     it { should belong_to :user }
     it { should have_many :order_items }
     it { should have_many(:orders).through(:order_items) }
+    it { should have_many(:reviews).through(:order_items) }
   end
 
   describe 'class methods' do
@@ -91,5 +92,27 @@ RSpec.describe Item, type: :model do
     expect(item_3.ever_ordered?).to eq(false)
     expect(item_4.ever_ordered?).to eq(false)
     expect(item_5.ever_ordered?).to eq(false)
+  end
+
+  it "#avg_review" do
+    @user = create(:user)
+    @user2 = create(:user)
+    @merchant = create(:merchant)
+    @item = create(:item, user: @merchant)
+    @item2 = create(:item, user: @merchant)
+    @order = create(:order, user: @user, status: 1)
+    @order2 = create(:order, user: @user, status: 1)
+    @order3 = create(:order, user: @user2, status: 1)
+    @order_item = create(:fulfilled_order_item, order: @order, item: @item)
+    @order_item2 = create(:fulfilled_order_item, order: @order2, item: @item)
+    @order_item3 = create(:fulfilled_order_item, order: @order3, item: @item)
+    @order_item4 = create(:fulfilled_order_item, order: @order3, item: @item2)
+    @review = create(:review, user: @user, order_item: @order_item, rating: 1, title: "Review 1")
+    @review2 = create(:review, user: @user, order_item: @order_item2, rating: 2, title: "Review 2")
+    @review3 = create(:review, user: @user2, order_item: @order_item3, rating: 3, title: "Review 3")
+    @review4 = create(:review, user: @user2, order_item: @order_item4, rating: 5, title: "Review 4")
+
+    expect(@item.avg_rating).to eq(2)
+    expect(@item2.avg_rating).to eq(5)
   end
 end

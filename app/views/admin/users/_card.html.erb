@@ -4,7 +4,7 @@
       <%= link_to user.name, admin_user_path(user) %>
     <% end %>
     <p>Registration Date:<br/>
-      <em><%= user.created_at %></em>
+      <em><%= user.created_at.to_date.to_s %></em>
     </p>
     <p>
       <% if user.active %>
@@ -15,6 +15,7 @@
     </p>
     <p>
       <%= button_to 'Upgrade to Merchant', admin_upgrade_user_path(user), method: :put %>
+      <%= button_to 'Edit User Profile', edit_admin_user_path(user), method: :get %>
     </p>
   <% end %>
 <% end %>

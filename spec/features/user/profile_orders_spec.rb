@@ -48,11 +48,11 @@ RSpec.describe 'Profile Orders page', type: :feature do
 
         within "#order-#{@order.id}" do
           expect(page).to have_link("Order ID #{@order.id}")
-          expect(page).to have_content("Created: #{@order.created_at}")
-          expect(page).to have_content("Last Update: #{@order.updated_at}")
+          expect(page).to have_content("Created: #{@order.created_at.to_date.to_s}")
+          expect(page).to have_content("Last Update: #{@order.updated_at.to_date.to_s}")
           expect(page).to have_content("Status: #{@order.status}")
           expect(page).to have_content("Item Count: #{@order.total_item_count}")
-          expect(page).to have_content("Total Cost: #{@order.total_cost}")
+          expect(page).to have_content("Total Cost: #{number_to_currency(@order.total_cost)}")
         end
       end
     end

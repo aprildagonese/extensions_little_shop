@@ -8,6 +8,21 @@ class Admin::MerchantsController < Admin::BaseController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+    @form_path = [:admin, @user]
+    render :'/users/edit'
+  end
+
+  def update
+    @user = User.find(params[:id])
+    @form_path = [:admin, @user]
+    if @user.update(user_params)
+      flash[:success] = "Profile has been updated"
+      redirect_to admin_user_path(@user)
+    end
+  end
+
   def downgrade
     user = User.find(params[:id])
     user.role = :default

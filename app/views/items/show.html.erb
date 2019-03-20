@@ -1,1 +1,20 @@
 <%= render partial: "card", locals: {item: @item, img_width: 300}%>
+
+<%= tag.div class: "card float-center review-panel" do %>
+  <h2>User Reviews of <%= @item.name %><h2>
+    <% @item.reviews.each do |review| %>
+      <%= tag.section class: "review-card review-#{review.id}" do %>
+        <p><%= tag.h5 class: "review-title" do %>
+          <%= review.title %>
+        <% end %></p>
+        <p><strong>Author: </strong><%= review.user.name %><br/>
+        <strong>Rating: </strong><%= review.rating %><br/>
+        <strong>Review Date: </strong><%= review.created_at.to_date.to_s %><br/>
+        <% unless review.created_at == review.updated_at %>
+          <strong>Updated On: </strong><%= review.created_at.to_date.to_s %><br/>
+        <% end %>
+        <strong>Description: </strong><%= review.description %></p>
+      <% end %>
+    <% end %>
+
+<% end %>

@@ -8,16 +8,17 @@
       <% end %>
     <% end %>
     <p><%= merchant.city %>, <%= merchant.state %></p>
-    <p>Registered Date: <%= merchant.created_at %><br/>
+    <p>Registered Date: <%= merchant.created_at.to_date.to_s %><br/>
 
     <% if current_admin? %>
-    <p>
-    <% if merchant.active %>
-    <%= button_to 'Disable Merchant', admin_disable_merchant_path(merchant), method: :patch %>
-    <% else %>
-    <%= button_to 'Enable Merchant', admin_enable_merchant_path(merchant), method: :patch %>
-    <% end %>
-    </p>
+      <%= button_to 'Edit User Profile', edit_admin_user_path(merchant), method: :get %>
+      <p>
+        <% if merchant.active %>
+          <%= button_to 'Disable Merchant', admin_disable_merchant_path(merchant), method: :patch %>
+        <% else %>
+          <%= button_to 'Enable Merchant', admin_enable_merchant_path(merchant), method: :patch %>
+        <% end %>
+      </p>
     <% end %>
   <% end %>
 <% end %>

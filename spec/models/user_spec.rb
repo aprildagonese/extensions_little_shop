@@ -15,6 +15,7 @@ RSpec.describe User, type: :model do
     # as user
     it { should have_many :orders }
     it { should have_many(:order_items).through(:orders)}
+    it {should have_many :reviews }
     # as merchant
     it { should have_many :items }
   end
@@ -25,6 +26,58 @@ RSpec.describe User, type: :model do
       inactive_merchant = create(:inactive_merchant)
 
       expect(User.active_merchants).to eq(active_merchants)
+    end
+
+    it ".top_merchants_by_qty_sold" do
+      u1, u2, u3 = create_list(:user, 3)
+      @m1, @m2, @m3, @m4, @m5, @m6, @m7, @m8, @m9, @m10, @m11, @m12, @m13 = create_list(:merchant, 13)
+      i1 = create(:item, merchant_id: @m1.id)
+      i2 = create(:item, merchant_id: @m2.id)
+      i3 = create(:item, merchant_id: @m3.id)
+      i4 = create(:item, merchant_id: @m4.id)
+      i5 = create(:item, merchant_id: @m5.id)
+      i6 = create(:item, merchant_id: @m6.id)
+      i7 = create(:item, merchant_id: @m7.id)
+      i8 = create(:item, merchant_id: @m8.id)
+      i9 = create(:item, merchant_id: @m9.id)
+      i10 = create(:item, merchant_id: @m10.id)
+      i11 = create(:item, merchant_id: @m11.id)
+      i12 = create(:item, merchant_id: @m12.id)
+      i13 = create(:item, merchant_id: @m13.id)
+      o1 = create(:completed_order, user: u1, created_at: 30.days.ago)
+      o2 = create(:completed_order, user: u1, created_at: 30.days.ago)
+      o3 = create(:completed_order, user: u1, created_at: 30.days.ago)
+      o4 = create(:completed_order, user: u1)
+      o5 = create(:cancelled_order, user: u2)
+      o6 = create(:completed_order, user: u2)
+      o7 = create(:completed_order, user: u2, created_at: 30.days.ago)
+      o8 = create(:completed_order, user: u2)
+      o9 = create(:completed_order, user: u3, created_at: 30.days.ago)
+      o10 = create(:completed_order, user: u3, created_at: 30.days.ago)
+      o11 = create(:completed_order, user: u3)
+      o12 = create(:completed_order, user: u3, created_at: 30.days.ago)
+      o13 = create(:completed_order, user: u3)
+      oi1 = create(:fulfilled_order_item, item: i1, order: o1, created_at: 30.days.ago, quantity: 11)
+      oi2 = create(:fulfilled_order_item, item: i2, order: o2, created_at: 30.days.ago, quantity: 7)
+      oi3 = create(:fulfilled_order_item, item: i3, order: o3, created_at: 30.days.ago, quantity: 12)
+      oi4 = create(:order_item, item: i4, order: o4, created_at: 4.days.ago, quantity: 8)
+      oi5 = create(:order_item, item: i5, order: o5, created_at: 5.days.ago, quantity: 13)
+      oi6 = create(:fulfilled_order_item, item: i6, order: o6, created_at: 3.days.ago, quantity: 3)
+      oi7 = create(:fulfilled_order_item, item: i7, order: o7, created_at: 30.days.ago, quantity: 2)
+      oi8 = create(:fulfilled_order_item, item: i8, order: o8, created_at: 2.days.ago, quantity: 9)
+      oi9 = create(:fulfilled_order_item, item: i9, order: o9, created_at: 30.days.ago, quantity: 4)
+      oi10 = create(:fulfilled_order_item, item: i10, order: o10, created_at: 30.days.ago, quantity: 6)
+      oi11 = create(:fulfilled_order_item, item: i11, order: o11, created_at: 2.days.ago, quantity: 1)
+      oi12 = create(:fulfilled_order_item, item: i12, order: o12, created_at: 30.days.ago, quantity: 5)
+      oi13 = create(:fulfilled_order_item, item: i13, order: o13, created_at: 2.days.ago, quantity: 10)
+
+      expected_current_month = [@m13, @m8, @m6, @m11]
+      expected_last_month = [@m3, @m1, @m2, @m10, @m12, @m9, @m7]
+
+      expect(User.merchants_by_qty_sold_this_month).to eq(expected_current_month)
+      expect(User.merchants_by_qty_sold_this_month.first.qty_sold).to eq(10)
+      expect(User.merchants_by_qty_sold_last_month).to eq(expected_last_month)
+      expect(User.merchants_by_qty_sold_last_month.first.qty_sold).to eq(12)
     end
 
     describe "statistics" do
@@ -98,6 +151,102 @@ RSpec.describe User, type: :model do
         expect(User.top_user_cities_by_order_count(3)[2].city).to eq("Fairfield")
         expect(User.top_user_cities_by_order_count(3)[2].order_count).to eq(1)
       end
+    end
+
+    describe "more statistics" do
+      before :each do
+        @u1 = create(:user, city: "San Francisco", state: "CA")
+        @u2 = create(:user, city: "Denver", state: "CO")
+        @u3 = create(:user, city: "Portland", state: "OR")
+        @u4 = create(:user, city: "San Francisco", state: "CA")
+        @u5 = create(:user, city: "Fort Collins", state: "CO")
+        @u6 = create(:user, city: "Portland", state: "OR")
+        @u7 = create(:user, city: "Ashland", state: "OR")
+        @u8 = create(:user, city: "Bend", state: "OR")
+        @u9 = create(:user, city: "San Diego", state: "CA")
+        @u10 = create(:user, city: "Boulder", state: "CO")
+        @u11 = create(:user, city: "Santa Barbara", state: "CA")
+        @u12 = create(:user, city: "San Francisco", state: "CA")
+        @u13 = create(:user, city: "Breckenridge", state: "CO")
+        @m1, @m2, @m3, @m4, @m5, @m6, @m7, @m8, @m9, @m10, @m11, @m12, @m13 = create_list(:merchant, 13, state: "CO")
+        @i1 = create(:item, merchant_id: @m1.id, price: 1.00)
+        @i2 = create(:item, merchant_id: @m2.id, price: 1.00)
+        @i3 = create(:item, merchant_id: @m3.id, price: 1.00)
+        @i4 = create(:item, merchant_id: @m4.id, price: 1.00)
+        @i5 = create(:item, merchant_id: @m5.id, price: 1.00)
+        @i6 = create(:item, merchant_id: @m6.id, price: 1.00)
+        @i7 = create(:item, merchant_id: @m7.id, price: 1.00)
+        @i8 = create(:item, merchant_id: @m8.id, price: 1.00)
+        @i9 = create(:item, merchant_id: @m9.id, price: 1.00)
+        @i10 = create(:item, merchant_id: @m10.id, price: 1.00)
+        @i11 = create(:item, merchant_id: @m11.id, price: 1.00)
+        @i12 = create(:item, merchant_id: @m12.id, price: 1.00)
+        @i13 = create(:item, merchant_id: @m13.id, price: 1.00)
+        @o1 = create(:completed_order, user: @u1, created_at: 30.days.ago)
+        @o2 = create(:completed_order, user: @u2, created_at: 30.days.ago)
+        @o3 = create(:completed_order, user: @u3, created_at: 30.days.ago)
+        @o4 = create(:completed_order, user: @u4)
+        @o5 = create(:cancelled_order, user: @u5)
+        @o6 = create(:completed_order, user: @u6)
+        @o7 = create(:completed_order, user: @u7, created_at: 30.days.ago)
+        @o8 = create(:completed_order, user: @u8)
+        @o9 = create(:completed_order, user: @u9, created_at: 30.days.ago)
+        @o10 = create(:completed_order, user: @u10, created_at: 30.days.ago)
+        @o11 = create(:completed_order, user: @u11)
+        @o12 = create(:completed_order, user: @u12, created_at: 30.days.ago)
+        @o13 = create(:completed_order, user: @u13)
+        @oi1 = create(:fulfilled_order_item, item: @i1, order: @o1, created_at: 30.days.ago, updated_at: 5.days.ago, quantity: 11, price: 1.00)
+        @oi2 = create(:fulfilled_order_item, item: @i2, order: @o2, created_at: 30.days.ago, quantity: 7, price: 1.00)
+        @oi3 = create(:fulfilled_order_item, item: @i3, order: @o3, created_at: 30.days.ago, updated_at: 10.days.ago, quantity: 12, price: 1.00)
+        @oi4 = create(:order_item, item: @i4, order: @o4, created_at: 4.days.ago, quantity: 8, price: 1.00)
+        @oi5 = create(:order_item, item: @i5, order: @o5, created_at: 5.days.ago, quantity: 13, price: 1.00)
+        @oi6 = create(:fulfilled_order_item, item: @i6, order: @o6, created_at: 3.days.ago, quantity: 3, price: 1.00)
+        @oi7 = create(:fulfilled_order_item, item: @i7, order: @o7, created_at: 30.days.ago, updated_at: 2.days.ago, quantity: 2, price: 1.00)
+        @oi8 = create(:fulfilled_order_item, item: @i8, order: @o8, created_at: 2.days.ago, quantity: 9, price: 1.00)
+        @oi9 = create(:fulfilled_order_item, item: @i9, order: @o9, created_at: 30.days.ago, updated_at: 28.days.ago, quantity: 4, price: 1.00)
+        @oi10 = create(:fulfilled_order_item, item: @i10, order: @o10, created_at: 30.days.ago, quantity: 6, price: 1.00)
+        @oi11 = create(:fulfilled_order_item, item: @i11, order: @o11, created_at: 2.days.ago, quantity: 1, price: 1.00)
+        @oi12 = create(:fulfilled_order_item, item: @i12, order: @o12, created_at: 30.days.ago, updated_at: 30.days.ago, quantity: 5, price: 1.00)
+        @oi13 = create(:fulfilled_order_item, item: @i13, order: @o13, created_at: 2.days.ago, quantity: 10, price: 1.00)
+      end
+
+      it ".merchants_by_qty_sold_by_month" do
+        expected_current_month = [@m13, @m8, @m6, @m11]
+        expected_last_month = [@m3, @m1, @m2, @m10, @m12, @m9, @m7]
+
+        expect(User.merchants_by_qty_sold_this_month).to eq(expected_current_month)
+        expect(User.merchants_by_qty_sold_this_month.first.qty_sold).to eq(10)
+        expect(User.merchants_by_qty_sold_last_month).to eq(expected_last_month)
+        expect(User.merchants_by_qty_sold_last_month.first.qty_sold).to eq(12)
+      end
+
+      it ".top_merchants_by_revenue_by_month" do
+        expected_current_month = [@m13, @m8, @m6, @m11]
+        expected_last_month = [@m3, @m1, @m2, @m10, @m12, @m9, @m7]
+
+        expect(User.merchants_by_revenue_this_month).to eq(expected_current_month)
+        expect(User.merchants_by_revenue_this_month.first.revenue_this_month).to eq(10.00)
+        expect(User.merchants_by_revenue_last_month).to eq(expected_last_month)
+        expect(User.merchants_by_revenue_last_month.first.revenue_last_month).to eq(12.00)
+      end
+
+      it ".merchants_by_state_by_fulfillment_time" do
+        expected_ca = [@m12, @m9, @m11, @m1]
+        expected_or = [@m8, @m6, @m3, @m7]
+
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@u1)
+        expect(User.merchants_by_state_by_fulfillment_time("CA")).to eq(expected_ca)
+
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@u3)
+        expect(User.merchants_by_state_by_fulfillment_time("OR")).to eq(expected_or)
+      end
+
+      it ".top_merchants_by_my_city_by_fulfillment_time" do
+        expected_SF = [@m12, @m1]
+
+        expect(User.merchants_by_city_by_fulfillment_time("San Francisco", "CA")).to eq(expected_SF)
+      end
+
     end
   end
 

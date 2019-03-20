@@ -6,6 +6,7 @@ class User < ApplicationRecord
   # as a user
   has_many :orders
   has_many :order_items, through: :orders
+  has_many :reviews
   # as a merchant
   has_many :items, foreign_key: 'merchant_id'
 
@@ -67,6 +68,93 @@ class User < ApplicationRecord
         .select('users.*, avg(order_items.updated_at - order_items.created_at) AS fulfillment_time')
         .order("fulfillment_time #{order}")
         .limit(limit)
+  end
+
+  def self.merchants_by_state_by_fulfillment_time(state)
+    merchant_ids = Item.joins(:order_items)
+                       .joins(:orders)
+                       .joins("join users ON orders.user_id = users.id")
+                       .where(order_items: {fulfilled: true})
+                       .where(users: {state: state})
+                       .distinct
+                       .pluck(:merchant_id)
+    merchants = User.joins(:items)
+                    .joins("join order_items ON items.id = order_items.item_id")
+                    .group(:id)
+                    .select('users.*, avg(order_items.updated_at - order_items.created_at) AS fulfillment_time')
+                    .where(id: merchant_ids)
+                    .order("fulfillment_time asc")
+                    .limit(5)
+  end
+
+  def self.merchants_by_city_by_fulfillment_time(city, state)
+    merchant_ids = Item.joins(:order_items)
+                       .joins(:orders)
+                       .joins("join users ON orders.user_id = users.id")
+                       .where(order_items: {fulfilled: true})
+                       .where(users: {state: state})
+                       .where(users: {city: city})
+                       .distinct
+                       .pluck(:merchant_id)
+    merchants = User.joins(:items)
+                    .joins("join order_items ON items.id = order_items.item_id")
+                    .group(:id)
+                    .select('users.*, avg(order_items.updated_at - order_items.created_at) AS fulfillment_time')
+                    .where(id: merchant_ids)
+                    .order("fulfillment_time asc")
+                    .limit(5)
+  end
+
+  def self.merchants_by_qty_sold_this_month
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.id = order_items.order_id')
+        .where('orders.status = 1')
+        .where('order_items.fulfilled = true')
+        .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.beginning_of_month, Date.today.end_of_month)
+        .group(:id)
+        .select('users.*, sum(order_items.quantity) AS qty_sold')
+        .order("qty_sold DESC")
+        .limit(10)
+  end
+
+  def self.merchants_by_qty_sold_last_month
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.id = order_items.order_id')
+        .where('orders.status = 1')
+        .where('order_items.fulfilled = true')
+        .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.last_month.beginning_of_month, Date.today.beginning_of_month)
+        .group(:id)
+        .select('users.*, sum(order_items.quantity) AS qty_sold')
+        .order("qty_sold DESC")
+        .limit(10)
+  end
+
+  def self.merchants_by_revenue_this_month
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.id = order_items.order_id')
+        .where('orders.status = 1')
+        .where('order_items.fulfilled = true')
+        .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.beginning_of_month, Date.today.end_of_month)
+        .group(:id)
+        .select('users.*, sum(order_items.quantity * order_items.price) AS revenue_this_month')
+        .order("revenue_this_month DESC")
+        .limit(10)
+  end
+
+  def self.merchants_by_revenue_last_month
+    self.joins(:items)
+        .joins('join order_items on items.id = order_items.item_id')
+        .joins('join orders on orders.id = order_items.order_id')
+        .where('orders.status = 1')
+        .where('order_items.fulfilled = true')
+        .where('order_items.created_at > ? AND order_items.created_at < ?', Date.today.last_month.beginning_of_month, Date.today.beginning_of_month)
+        .group(:id)
+        .select('users.*, sum(order_items.quantity * order_items.price) AS revenue_last_month')
+        .order("revenue_last_month DESC")
+        .limit(10)
   end
 
   def top_items_sold_by_quantity(limit)
